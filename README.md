@@ -106,4 +106,6 @@ Para investigar exposición y costes: [diagnósticos y walk-forward interno](doc
 
 Para reducir rotación y evaluar el target de 1h: [experimentos de salidas y horizonte](docs/exit-horizon-experiments.md).
 
+Para la comparación de features de régimen: [protocolo v2](docs/features-v2-protocol.md) y [resultados frente a v1](docs/features-v2-results.md).
+
 Ver [implementation_plan_ai_trading.md](implementation_plan_ai_trading.md) para el plan completo.

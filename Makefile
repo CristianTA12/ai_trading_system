@@ -1,4 +1,4 @@
-.PHONY: help setup up down restart logs test lint format check clean download-data validate-data load-data setup-dashboard sync-history build-features backtest train-xgboost diagnose-xgboost walk-forward experiment-exits experiment-hourly
+.PHONY: help setup up down restart logs test lint format check clean download-data validate-data load-data setup-dashboard sync-history build-features backtest train-xgboost diagnose-xgboost walk-forward experiment-exits experiment-hourly experiment-regime
 
 help: ## Mostrar ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
@@ -120,6 +120,9 @@ experiment-exits: ## Comparar salidas sin reentrenar los modelos guardados
 
 experiment-hourly: ## Target binario de 1h en los cuatro folds internos
 	python -m src.training.exit_horizon --mode hourly $(DATA_ARGS)
+
+experiment-regime: ## Features v2 frente a v1 con cobertura idéntica y holding 1h
+	python -m src.training.regime_experiment $(DATA_ARGS)
 
 backtest: ## Ejecutar backtest
 	python -m src.backtesting.run_backtest $(DATA_ARGS)
