@@ -69,10 +69,14 @@ services:
     environment:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      POSTGRES_DB: ${POSTGRES_DB:-trading_db}
+      GRAFANA_DB_PASSWORD: ${GRAFANA_DB_PASSWORD:-}
       GF_INSTALL_PLUGINS: grafana-clock-panel,grafana-simple-json-datasource
     volumes:
       - ${DATA_DIR:-/data}/grafana:/var/lib/grafana
-      - ./dashboards/grafana:/etc/grafana/provisioning/dashboards
+      - ./docker/grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/trading.yml:ro
+      - ./docker/grafana/datasources.yml:/etc/grafana/provisioning/datasources/trading.yml:ro
+      - ./dashboards/grafana:/var/lib/grafana/dashboards:ro
     depends_on:
       timescaledb:
         condition: service_healthy

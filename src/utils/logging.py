@@ -6,6 +6,7 @@ facilitando debugging y monitorización.
 
 from __future__ import annotations
 
+import logging
 import sys
 from pathlib import Path
 
@@ -44,7 +45,7 @@ def setup_logging(log_level: str = "INFO", log_dir: Path | None = None) -> None:
     structlog.configure(
         processors=processors,
         wrapper_class=structlog.make_filtering_bound_logger(
-            structlog.get_level_from_name(log_level)
+            logging.getLevelName(log_level.upper())
         ),
         context_class=dict,
         logger_factory=structlog.PrintLoggerFactory(),

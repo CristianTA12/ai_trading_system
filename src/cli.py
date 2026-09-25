@@ -2,8 +2,18 @@
 
 from __future__ import annotations
 
-import click
+import json
+from pathlib import Path
 
+import click
+import psycopg2
+
+from src.data.downloaders.historical_downloader import (
+    default_month,
+    download_archive,
+    load_month,
+    validate_archive,
+)
 from src.utils.logging import setup_logging
 
 
@@ -42,11 +52,51 @@ def status() -> None:
 
 
 @main.command()
-def download_historical() -> None:
-    """Descargar datos históricos de Binance."""
-    click.echo("📥 Descargando datos históricos...")
-    # TODO: Implementar en Fase 1
-    click.echo("⚠️  No implementado todavía (Fase 1)")
+@click.option(
+    "--month", default=default_month, help="Mes completo YYYY-MM; por defecto, el anterior."
+)
+@click.option("--raw-dir", type=click.Path(path_type=Path, file_okay=False), default=None)
+@click.option("--refresh", is_flag=True, help="Volver a descargar y verificar el archivo.")
+def download_historical(month: str, raw_dir: Path | None, refresh: bool) -> None:
+    """Descargar y validar BTC/USDT spot 1m (sin cargar la base de datos)."""
+    try:
+        path = download_archive(month, raw_dir, refresh)
+        _, report = validate_archive(month, raw_dir)
+        click.echo(f"Archivo: {path}")
+        _show_report(report)
+    except (ValueError, OSError) as exc:
+        raise click.ClickException(str(exc)) from exc
+
+
+def _show_report(report: dict) -> None:
+    click.echo(json.dumps(report, indent=2))
+    if not report["valid"]:
+        raise click.ClickException("Datos rechazados; consulta el informe de calidad")
+
+
+@main.command("validate-data")
+@click.option("--month", default=default_month)
+@click.option("--raw-dir", type=click.Path(path_type=Path, file_okay=False), default=None)
+def validate_data(month: str, raw_dir: Path | None) -> None:
+    """Validar checksum y calidad de un mes descargado; no accede a la red."""
+    try:
+        _, report = validate_archive(month, raw_dir)
+        _show_report(report)
+    except (ValueError, OSError) as exc:
+        raise click.ClickException(str(exc)) from exc
+
+
+@main.command("load-data")
+@click.option("--month", default=default_month)
+@click.option("--raw-dir", type=click.Path(path_type=Path, file_okay=False), default=None)
+def load_data(month: str, raw_dir: Path | None) -> None:
+    """Validar y cargar el mes local en TimescaleDB; repetible sin duplicados."""
+    try:
+        _show_report(load_month(month, raw_dir))
+    except (ValueError, OSError) as exc:
+        raise click.ClickException(str(exc)) from exc
+    except psycopg2.Error as exc:
+        raise click.ClickException("Error PostgreSQL: comprueba DATABASE_URL y make up") from exc
 
 
 @main.command()

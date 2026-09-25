@@ -96,4 +96,6 @@ make check
 
 ## Fases
 
+La primera ingesta mensual está disponible: [descargar, validar y cargar datos](docs/data-ingestion.md).
+
 Ver [implementation_plan_ai_trading.md](implementation_plan_ai_trading.md) para el plan completo.

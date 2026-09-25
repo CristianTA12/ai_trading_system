@@ -101,3 +101,7 @@ El proyecto contiene comandos CLI pendientes de implementación, incluido paper
 trading. `trading status` todavía muestra estados de ejemplo. Los targets de
 Prometheus en los puertos 8000 y 9100 necesitan procesos adicionales que este
 Compose no inicia.
+
+Para cargar el primer histórico y habilitar su dashboard, seguir la
+[guía de ingesta](data-ingestion.md). Incluye el paso `make setup-dashboard`
+para crear el usuario de lectura de Grafana en una base de datos existente.

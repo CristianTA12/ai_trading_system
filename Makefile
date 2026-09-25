@@ -1,4 +1,4 @@
-.PHONY: help setup up down restart logs test lint format check clean download-data
+.PHONY: help setup up down restart logs test lint format check clean download-data validate-data load-data setup-dashboard
 
 help: ## Mostrar ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
@@ -71,11 +71,19 @@ check: lint type-check test ## Ejecutar todas las verificaciones
 
 # === Data ===
 
+DATA_ARGS ?=
+
 download-data: ## Descargar datos históricos
-	python -m src.data.downloaders.historical_downloader
+	python -m src.cli download-historical $(DATA_ARGS)
 
 validate-data: ## Validar calidad de datos
-	python -m src.data.validators.data_quality_validator
+	python -m src.cli validate-data $(DATA_ARGS)
+
+load-data: ## Validar y cargar un archivo local en TimescaleDB
+	python -m src.cli load-data $(DATA_ARGS)
+
+setup-dashboard: ## Configurar acceso de lectura y dashboard de datos
+	python -m src.monitoring.setup_dashboard
 
 # === Trading ===
 

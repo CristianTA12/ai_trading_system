@@ -1,0 +1,16 @@
+apiVersion: 1
+datasources:
+  - name: Trading TimescaleDB
+    uid: trading-timescaledb
+    type: postgres
+    access: proxy
+    url: timescaledb:5432
+    user: trading_grafana
+    editable: false
+    jsonData:
+      database: $POSTGRES_DB
+      sslmode: disable
+      postgresVersion: 1600
+      timescaledb: true
+    secureJsonData:
+      password: $GRAFANA_DB_PASSWORD

@@ -1,0 +1,220 @@
+{
+  "uid": "trading-data-quality",
+  "title": "Datos BTC/USDT spot — cobertura y calidad",
+  "tags": [
+    "trading",
+    "data"
+  ],
+  "timezone": "utc",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "1m",
+  "time": {
+    "from": "now-90d",
+    "to": "now"
+  },
+  "timepicker": {
+    "hidden": true
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Velas almacenadas",
+      "type": "stat",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "trading-timescaledb"
+      },
+      "description": "Consulta el histórico cargado, independiente del selector temporal. Solo Binance spot BTC/USDT 1m. La cobertura comprueba meses con datos; no certifica calidad de precios.",
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "trading-timescaledb"
+          },
+          "rawSql": "SELECT count(*) AS velas FROM ohlcv WHERE symbol = 'BTC/USDT' AND exchange = 'binance_spot' AND timeframe = '1m'",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "values": false
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Última vela UTC",
+      "type": "table",
+      "gridPos": {
+        "x": 6,
+        "y": 0,
+        "w": 9,
+        "h": 4
+      },
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "trading-timescaledb"
+      },
+      "description": "Consulta el histórico cargado, independiente del selector temporal. Solo Binance spot BTC/USDT 1m. La cobertura comprueba meses con datos; no certifica calidad de precios.",
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "trading-timescaledb"
+          },
+          "rawSql": "SELECT max(time) AS ultima_vela FROM ohlcv WHERE symbol = 'BTC/USDT' AND exchange = 'binance_spot' AND timeframe = '1m'",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 3,
+      "title": "Primera vela UTC",
+      "type": "table",
+      "gridPos": {
+        "x": 15,
+        "y": 0,
+        "w": 9,
+        "h": 4
+      },
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "trading-timescaledb"
+      },
+      "description": "Consulta el histórico cargado, independiente del selector temporal. Solo Binance spot BTC/USDT 1m. La cobertura comprueba meses con datos; no certifica calidad de precios.",
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "trading-timescaledb"
+          },
+          "rawSql": "SELECT min(time) AS primera_vela FROM ohlcv WHERE symbol = 'BTC/USDT' AND exchange = 'binance_spot' AND timeframe = '1m'",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 4,
+      "title": "Cobertura por mes completo (UTC)",
+      "type": "table",
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 24,
+        "h": 6
+      },
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "trading-timescaledb"
+      },
+      "description": "Consulta el histórico cargado, independiente del selector temporal. Solo Binance spot BTC/USDT 1m. La cobertura comprueba meses con datos; no certifica calidad de precios.",
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "trading-timescaledb"
+          },
+          "rawSql": "WITH monthly AS (SELECT date_trunc('month', time AT TIME ZONE 'UTC') AS mes, count(*) AS velas FROM ohlcv WHERE symbol = 'BTC/USDT' AND exchange = 'binance_spot' AND timeframe = '1m' GROUP BY 1) SELECT mes, velas, (extract(epoch FROM (mes + interval '1 month' - mes))/60)::bigint AS esperadas, (extract(epoch FROM (mes + interval '1 month' - mes))/60)::bigint - velas AS minutos_ausentes, round(100.0*velas/(extract(epoch FROM (mes + interval '1 month' - mes))/60), 2) AS cobertura_pct FROM monthly ORDER BY mes DESC",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 5,
+      "title": "Cierre por hora — últimos 30 días cargados",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 0,
+        "y": 10,
+        "w": 24,
+        "h": 8
+      },
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "trading-timescaledb"
+      },
+      "description": "Consulta el histórico cargado, independiente del selector temporal. Solo Binance spot BTC/USDT 1m. La cobertura comprueba meses con datos; no certifica calidad de precios.",
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "trading-timescaledb"
+          },
+          "rawSql": "SELECT time_bucket('1 hour', time) AS time, last(close,time) AS cierre FROM ohlcv WHERE symbol = 'BTC/USDT' AND exchange = 'binance_spot' AND timeframe = '1m' AND time >= (SELECT max(time) - interval '30 days' FROM ohlcv WHERE symbol = 'BTC/USDT' AND exchange = 'binance_spot' AND timeframe = '1m') GROUP BY 1 ORDER BY 1",
+          "format": "time_series"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 6,
+      "title": "Últimas 20 velas (UTC)",
+      "type": "table",
+      "gridPos": {
+        "x": 0,
+        "y": 18,
+        "w": 24,
+        "h": 8
+      },
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "trading-timescaledb"
+      },
+      "description": "Consulta el histórico cargado, independiente del selector temporal. Solo Binance spot BTC/USDT 1m. La cobertura comprueba meses con datos; no certifica calidad de precios.",
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "trading-timescaledb"
+          },
+          "rawSql": "SELECT time, open, high, low, close, volume FROM ohlcv WHERE symbol = 'BTC/USDT' AND exchange = 'binance_spot' AND timeframe = '1m' ORDER BY time DESC LIMIT 20",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    }
+  ]
+}

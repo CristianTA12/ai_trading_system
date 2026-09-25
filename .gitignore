@@ -27,7 +27,7 @@ env/
 .ipynb_checkpoints/
 
 # Data (too large for git)
-data/
+/data/
 *.csv
 *.parquet
 *.h5
