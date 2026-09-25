@@ -1,4 +1,4 @@
-.PHONY: help setup up down restart logs test lint format check clean download-data validate-data load-data setup-dashboard sync-history build-features backtest train-xgboost diagnose-xgboost walk-forward
+.PHONY: help setup up down restart logs test lint format check clean download-data validate-data load-data setup-dashboard sync-history build-features backtest train-xgboost diagnose-xgboost walk-forward experiment-exits experiment-hourly
 
 help: ## Mostrar ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
@@ -114,6 +114,12 @@ diagnose-xgboost: ## Diagnosticar exposición y costes del baseline en validatio
 
 walk-forward: ## Evaluar cuatro folds temporales internos de train
 	python -m src.training.walk_forward $(DATA_ARGS)
+
+experiment-exits: ## Comparar salidas sin reentrenar los modelos guardados
+	python -m src.training.exit_horizon --mode exits $(DATA_ARGS)
+
+experiment-hourly: ## Target binario de 1h en los cuatro folds internos
+	python -m src.training.exit_horizon --mode hourly $(DATA_ARGS)
 
 backtest: ## Ejecutar backtest
 	python -m src.backtesting.run_backtest $(DATA_ARGS)

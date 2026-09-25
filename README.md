@@ -104,4 +104,6 @@ Para comparar estrategias y entrenar el primer modelo: [backtesting y XGBoost](d
 
 Para investigar exposición y costes: [diagnósticos y walk-forward interno](docs/xgboost-diagnostics.md).
 
+Para reducir rotación y evaluar el target de 1h: [experimentos de salidas y horizonte](docs/exit-horizon-experiments.md).
+
 Ver [implementation_plan_ai_trading.md](implementation_plan_ai_trading.md) para el plan completo.

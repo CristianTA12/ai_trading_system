@@ -103,4 +103,5 @@ funding/OI de derivados no son costes ni datos nativos de esta operativa spot.
 
 Los folds usados para elegir variantes pasan a ser desarrollo; no confundir mejoras
 tras muchos intentos con evidencia independiente. Mantener reservado test y no saltar
-a deep learning. Este cambio implementa el diagnóstico, no esas nuevas variantes.
+a deep learning. La siguiente comparación ya está disponible en
+[políticas de salida y target binario de una hora](exit-horizon-experiments.md).
