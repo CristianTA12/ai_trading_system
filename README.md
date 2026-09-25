@@ -71,6 +71,8 @@ ai-trading-system/
 
 ## Quickstart
 
+Para Windows con Ubuntu WSL2, seguir la [guía de WSL](docs/wsl.md).
+
 ```bash
 # 1. Clonar
 git clone <repo-url>
@@ -80,11 +82,13 @@ cd ai-trading-system
 cp .env.example .env
 # Editar .env con tus claves de exchange
 
-# 3. Levantar servicios
-docker compose up -d
+# 3. Levantar servicios (Docker Compose y GPU NVIDIA configurados)
+make up
 
-# 4. Instalar dependencias Python
-pip install -e ".[dev]"
+# 4. Instalar dependencias Python en un entorno virtual
+python3 -m venv .venv
+source .venv/bin/activate
+make setup
 
 # 5. Verificar
 make check

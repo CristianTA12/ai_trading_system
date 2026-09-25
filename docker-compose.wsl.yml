@@ -1,0 +1,29 @@
+# Use with COMPOSE_FILE=docker-compose.yml:docker-compose.wsl.yml in WSL.
+# Docker-managed Linux volumes avoid NTFS ownership and permission issues.
+services:
+  timescaledb:
+    volumes:
+      - timescaledb-data:/var/lib/postgresql/data
+  redis:
+    volumes:
+      - redis-data:/data
+  mlflow:
+    volumes:
+      - mlflow-data:/mlflow/artifacts
+  grafana:
+    volumes:
+      - grafana-data:/var/lib/grafana
+  ollama:
+    volumes:
+      - ollama-data:/root/.ollama
+  prometheus:
+    volumes:
+      - prometheus-data:/prometheus
+
+volumes:
+  timescaledb-data:
+  redis-data:
+  mlflow-data:
+  grafana-data:
+  ollama-data:
+  prometheus-data:
