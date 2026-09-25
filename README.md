@@ -108,4 +108,6 @@ Para reducir rotación y evaluar el target de 1h: [experimentos de salidas y hor
 
 Para la comparación de features de régimen: [protocolo v2](docs/features-v2-protocol.md) y [resultados frente a v1](docs/features-v2-results.md).
 
+Para aislar el contexto secuencial corto: [protocolo de ablación de lags](docs/lags-ablation-protocol.md) y [resultados](docs/lags-ablation-results.md).
+
 Ver [implementation_plan_ai_trading.md](implementation_plan_ai_trading.md) para el plan completo.
