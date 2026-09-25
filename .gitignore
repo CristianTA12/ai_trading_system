@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data (too large for git)
+data/
+*.csv
+*.parquet
+*.h5
+*.hdf5
+
+# Models (too large for git)
+*.pt
+*.pth
+*.onnx
+*.pkl
+*.joblib
+mlruns/
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker volumes
+docker-volumes/
+
+# Secrets
+*.pem
+*.key

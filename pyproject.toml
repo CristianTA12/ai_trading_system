@@ -1,0 +1,105 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "ai-trading-system"
+version = "0.1.0"
+description = "Sistema de trading cuantitativo multimodelo con IA"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+
+dependencies = [
+    # === Data Ingestion ===
+    "ccxt>=4.0",                    # Exchange API unificada
+    "websockets>=12.0",             # WebSocket client
+    "aiohttp>=3.9",                 # HTTP async
+    "feedparser>=6.0",              # RSS parser
+    "praw>=7.7",                    # Reddit API
+    "pytrends>=4.9",                # Google Trends
+    "yfinance>=0.2",                # Yahoo Finance
+
+    # === Database ===
+    "psycopg2-binary>=2.9",         # PostgreSQL driver
+    "sqlalchemy>=2.0",              # ORM
+    "alembic>=1.13",                # Migraciones DB
+    "redis>=5.0",                   # Redis client
+
+    # === Feature Engineering ===
+    "pandas>=2.1",                  # DataFrames
+    "numpy>=1.26",                  # Numérico
+    "ta>=0.11",                     # Indicadores técnicos
+    "scipy>=1.11",                  # Estadística
+
+    # === Machine Learning ===
+    "scikit-learn>=1.3",            # ML básico
+    "xgboost>=2.0",                 # XGBoost
+    "lightgbm>=4.0",                # LightGBM
+    "optuna>=3.4",                  # Hyperparameter optimization
+
+    # === Deep Learning ===
+    "torch>=2.1",                   # PyTorch
+    "lightning>=2.1",               # PyTorch Lightning
+
+    # === LLM Local ===
+    "ollama>=0.3",                  # Ollama Python client
+
+    # === Experiment Tracking ===
+    "mlflow>=2.9",                  # MLflow
+
+    # === Monitoring ===
+    "prometheus-client>=0.19",      # Métricas Prometheus
+    "python-telegram-bot>=20.0",    # Alertas Telegram
+
+    # === Utils ===
+    "pydantic>=2.5",                # Validación de datos
+    "pydantic-settings>=2.1",       # Settings management
+    "structlog>=23.2",              # Logging estructurado
+    "click>=8.1",                   # CLI
+    "python-dotenv>=1.0",           # .env loader
+    "tenacity>=8.2",                # Retry logic
+    "schedule>=1.2",                # Task scheduling
+    "rich>=13.7",                   # Terminal output bonito
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.1",
+    "black>=23.12",
+    "mypy>=1.7",
+    "pre-commit>=3.6",
+    "ipykernel>=6.27",
+    "jupyter>=1.0",
+]
+
+[project.scripts]
+trading = "src.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-v --tb=short"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true

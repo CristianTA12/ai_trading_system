@@ -1,0 +1,14 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'trading-system'
+    static_configs:
+      - targets: ['host.docker.internal:8000']
+        labels:
+          app: 'ai-trading-system'
+
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['host.docker.internal:9100']

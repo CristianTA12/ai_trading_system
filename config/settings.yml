@@ -1,0 +1,154 @@
+# ============================================
+# AI Trading System — Configuración Principal
+# ============================================
+
+# === General ===
+general:
+  project_name: "ai-trading-system"
+  log_level: "INFO"
+  timezone: "UTC"
+
+# === Trading ===
+trading:
+  symbol: "BTC/USDT"
+  exchange: "binance"
+  timeframe: "15m"
+  mode: "paper"  # paper | live
+
+# === Data Collection ===
+data:
+  # Pares a monitorizar
+  symbols:
+    - "BTC/USDT"
+
+  # Timeframes para OHLCV
+  timeframes:
+    - "1m"
+    - "5m"
+    - "15m"
+    - "1h"
+
+  # Order book
+  orderbook_depth: 20  # Niveles de profundidad
+
+  # WebSocket
+  websocket:
+    reconnect_delay: 5         # Segundos entre reconexiones
+    max_reconnect_attempts: 50
+    ping_interval: 30
+
+  # Datos históricos
+  historical:
+    start_date: "2019-01-01"
+    end_date: null  # null = hasta hoy
+    source: "binance"
+
+# === Features ===
+features:
+  version: 1
+
+  # Returns
+  return_periods: [1, 5, 15, 60]  # en minutos
+
+  # Indicadores técnicos
+  indicators:
+    rsi_period: 14
+    macd_fast: 12
+    macd_slow: 26
+    macd_signal: 9
+    ema_periods: [20, 50]
+    atr_period: 14
+    bollinger_period: 20
+    bollinger_std: 2
+
+  # Volatilidad
+  volatility_windows: [5, 15, 60]  # en minutos
+
+# === Models ===
+models:
+  # XGBoost
+  xgboost:
+    target: "return_15m"
+    target_threshold: 0.0025  # 0.25% para clasificar UP/DOWN
+    n_estimators: 500
+    max_depth: 6
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    min_child_weight: 5
+    early_stopping_rounds: 50
+
+  # Transformer
+  transformer:
+    sequence_length: 240  # velas
+    d_model: 128
+    n_heads: 8
+    n_layers: 4
+    dropout: 0.1
+    learning_rate: 0.0001
+    batch_size: 64
+    max_epochs: 100
+    patience: 10
+
+  # LLM Local
+  llm:
+    model: "qwen2.5:14b"
+    fallback_model: "llama3.1:8b"
+    temperature: 0.1
+    max_tokens: 256
+
+# === Backtesting ===
+backtesting:
+  # Costes de Binance
+  fees:
+    maker: 0.0002  # 0.02%
+    taker: 0.0004  # 0.04%
+  slippage: 0.0001   # 0.01% estimado
+  initial_capital: 10000  # USD para simulación
+
+# === Walk-forward ===
+walk_forward:
+  train_years: 3
+  validation_months: 3
+  test_months: 1
+  purge_gap_days: 7
+  embargo_hours: 24
+  step_months: 3  # Avance de ventana
+
+# === Risk Management ===
+risk:
+  max_risk_per_trade: 0.01     # 1% del capital
+  max_position_size: 0.20      # 20% del capital
+  max_daily_loss: 0.02         # 2% del capital
+  max_drawdown: 0.10           # 10% del capital
+  max_leverage: 3.0
+  max_open_positions: 3
+  min_confidence: 0.65
+  min_edge_after_costs: 0.001  # 0.1% mínimo de edge tras costes
+
+# === Retraining ===
+retraining:
+  schedule: "weekly"  # Domingos 02:00 UTC
+  cron: "0 2 * * 0"
+  training_window_years: 3
+  shadow_mode_hours: 48
+  promotion_criteria:
+    min_sharpe_ratio: 0.95  # Multiplicador vs modelo actual
+    max_drawdown_ratio: 1.1  # Multiplicador vs modelo actual
+    shadow_profitable: true
+
+# === Monitoring ===
+monitoring:
+  # Alertas
+  alerts:
+    daily_loss_threshold: 0.02
+    drawdown_threshold: 0.10
+    latency_threshold_ms: 5000
+    accuracy_degradation_pct: 10
+
+  # Health checks
+  health_check_interval: 60  # Segundos
+
+  # Telegram
+  telegram:
+    enabled: false  # Activar cuando se configure el bot
