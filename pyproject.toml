@@ -47,6 +47,7 @@ dependencies = [
 
     # === Experiment Tracking ===
     "mlflow>=2.9",                  # MLflow
+    "matplotlib>=3.8",             # Curvas de equity y drawdown
 
     # === Monitoring ===
     "prometheus-client>=0.19",      # Métricas Prometheus

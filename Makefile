@@ -1,4 +1,4 @@
-.PHONY: help setup up down restart logs test lint format check clean download-data validate-data load-data setup-dashboard sync-history build-features
+.PHONY: help setup up down restart logs test lint format check clean download-data validate-data load-data setup-dashboard sync-history build-features backtest train-xgboost
 
 help: ## Mostrar ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
@@ -104,7 +104,7 @@ live-trade: ## Iniciar trading real (¡CUIDADO!)
 # === Training ===
 
 train-xgboost: ## Entrenar modelo XGBoost
-	python -m src.training.train_xgboost
+	python -m src.training.train_xgboost $(DATA_ARGS)
 
 train-transformer: ## Entrenar modelo Transformer
 	python -m src.training.train_transformer
@@ -113,7 +113,7 @@ walk-forward: ## Ejecutar walk-forward validation
 	python -m src.training.walk_forward
 
 backtest: ## Ejecutar backtest
-	python -m src.backtesting.run_backtest
+	python -m src.backtesting.run_backtest $(DATA_ARGS)
 
 # === Cleanup ===
 

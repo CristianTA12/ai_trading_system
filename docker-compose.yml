@@ -46,7 +46,6 @@ services:
       - "5000:5000"
     environment:
       MLFLOW_BACKEND_STORE_URI: postgresql://${POSTGRES_USER:-trading}:${POSTGRES_PASSWORD:-trading_secret}@timescaledb:5432/${POSTGRES_DB:-trading_db}
-      MLFLOW_DEFAULT_ARTIFACT_ROOT: /mlflow/artifacts
     volumes:
       - ${DATA_DIR:-/data}/mlflow:/mlflow/artifacts
     command: >
@@ -54,7 +53,8 @@ services:
       --host 0.0.0.0
       --port 5000
       --backend-store-uri postgresql://${POSTGRES_USER:-trading}:${POSTGRES_PASSWORD:-trading_secret}@timescaledb:5432/${POSTGRES_DB:-trading_db}
-      --default-artifact-root /mlflow/artifacts
+      --serve-artifacts
+      --artifacts-destination /mlflow/artifacts
     depends_on:
       timescaledb:
         condition: service_healthy

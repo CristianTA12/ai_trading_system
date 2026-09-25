@@ -100,4 +100,6 @@ La primera ingesta mensual está disponible: [descargar, validar y cargar datos]
 
 Para varios años y variables causales de 15m: [dataset para backtesting](docs/backtesting-dataset.md).
 
+Para comparar estrategias y entrenar el primer modelo: [backtesting y XGBoost](docs/backtesting.md).
+
 Ver [implementation_plan_ai_trading.md](implementation_plan_ai_trading.md) para el plan completo.

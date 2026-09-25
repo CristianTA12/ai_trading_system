@@ -8,6 +8,7 @@ from pathlib import Path
 import click
 import psycopg2
 
+from src.backtesting.run_backtest import command as experiment_command
 from src.data.downloaders.historical_downloader import (
     default_month,
     download_archive,
@@ -166,12 +167,8 @@ def build_features_command(
     click.echo(json.dumps(report, indent=2))
 
 
-@main.command()
-def backtest() -> None:
-    """Ejecutar backtest."""
-    click.echo("📊 Ejecutando backtest...")
-    # TODO: Implementar en Fase 3
-    click.echo("⚠️  No implementado todavía (Fase 3)")
+main.add_command(experiment_command(), name="backtest")
+main.add_command(experiment_command(train_model=True), name="train-xgboost")
 
 
 if __name__ == "__main__":
