@@ -88,8 +88,9 @@ de integración crea un esquema temporal único en PostgreSQL y lo elimina al
 terminar; comprueba repetición de carga y rollback, sin modificar `public.ohlcv`.
 
 El siguiente paso, después de revisar este mes, es ampliar el histórico y crear
-features con separación temporal de entrenamiento, validación y prueba. No se
-ha implementado todavía streaming, ingesta de futuros ni entrenamiento.
+features con separación temporal de entrenamiento, validación y prueba: ver la
+[guía del dataset para backtesting](backtesting-dataset.md). No se ha implementado
+todavía streaming, ingesta de futuros ni entrenamiento.
 
 Fuentes: [formato, publicación y checksums de Binance](https://github.com/binance/binance-public-data),
 [datasource PostgreSQL de Grafana](https://grafana.com/docs/grafana/latest/datasources/postgres/configure/).

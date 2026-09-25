@@ -35,6 +35,14 @@ def test_repeat_load_and_transaction_rollback(make_archive, monkeypatch):
         )
         assert downloader.load_month("2024-02", root)["written_rows"] == 41760
         assert downloader.load_month("2024-02", root)["written_rows"] == 0
+        make_archive(omit_last=True)
+        partial = downloader.load_month("2024-02", root, allow_gaps=True)
+        assert partial["accepted_with_gaps"]
+        assert partial["written_rows"] == 0
+        assert partial["removed_rows"] == 1
+        with connection.cursor() as cursor:
+            cursor.execute(sql.SQL("SELECT count(*) FROM {}.ohlcv").format(sql.Identifier(schema)))
+            assert cursor.fetchone()[0] == 41759
         make_archive(close=106)
         assert downloader.load_month("2024-02", root)["written_rows"] == 41760
         with connection.cursor() as cursor:

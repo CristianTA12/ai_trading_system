@@ -27,6 +27,7 @@ dependencies = [
 
     # === Feature Engineering ===
     "pandas>=2.1",                  # DataFrames
+    "pyarrow>=14.0",               # Datasets Parquet
     "numpy>=1.26",                  # Numérico
     "ta>=0.11",                     # Indicadores técnicos
     "scipy>=1.11",                  # Estadística

@@ -1,4 +1,4 @@
-.PHONY: help setup up down restart logs test lint format check clean download-data validate-data load-data setup-dashboard
+.PHONY: help setup up down restart logs test lint format check clean download-data validate-data load-data setup-dashboard sync-history build-features
 
 help: ## Mostrar ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
@@ -84,6 +84,12 @@ load-data: ## Validar y cargar un archivo local en TimescaleDB
 
 setup-dashboard: ## Configurar acceso de lectura y dashboard de datos
 	python -m src.monitoring.setup_dashboard
+
+sync-history: ## Descargar y cargar varios meses (DATA_ARGS="--start YYYY-MM --end YYYY-MM")
+	python -m src.cli sync-history $(DATA_ARGS)
+
+build-features: ## Crear dataset de variables causales para backtesting
+	python -m src.cli build-features $(DATA_ARGS)
 
 # === Trading ===
 

@@ -111,7 +111,7 @@ def download_archive(month: str, raw_dir: Path | None = None, refresh: bool = Fa
     return path
 
 
-def read_archive(path: Path, month: str) -> pd.DataFrame:
+def read_archive(path: Path, month: str, exclude_truncated: bool = False) -> pd.DataFrame:
     """Parse timestamps explicitly: spot switches from ms to us in January 2025."""
     month_bounds(month)
     try:
@@ -142,28 +142,65 @@ def read_archive(path: Path, month: str) -> pd.DataFrame:
         unit = "us" if month >= "2025-01" else "ms"
         frame["time"] = pd.to_datetime(frame["timestamp"], unit=unit, utc=True)
         expected_duration = 60_000_000 - 1 if unit == "us" else 60_000 - 1
-        if ((frame["close_time"] - frame["timestamp"]) != expected_duration).any():
+        duration = frame["close_time"] - frame["timestamp"]
+        truncated = (duration >= 0) & (duration < expected_duration)
+        invalid_duration = duration != expected_duration
+        if invalid_duration.any() and (
+            not exclude_truncated or (invalid_duration & ~truncated).any()
+        ):
             raise ValueError("Duración de vela incorrecta o vela sin cerrar")
-        return frame[["time", "open", "high", "low", "close", "volume", "trades"]]
+        quarantine = [
+            {
+                "csv_row": int(i) + 1,
+                "time": frame.loc[i, "time"].isoformat(),
+                "duration_in_source_units": int(duration.loc[i]),
+                "unit": unit,
+                "reason": "truncated_source_candle",
+            }
+            for i in frame.index[truncated]
+        ]
+        result = frame.loc[
+            ~truncated, ["time", "open", "high", "low", "close", "volume", "trades"]
+        ].copy()
+        result.attrs["quarantine"] = quarantine
+        return result
     except (BadZipFile, pd.errors.ParserError, pd.errors.EmptyDataError, OverflowError) as exc:
         raise ValueError("Archivo de velas inválido") from exc
 
 
-def validate_archive(month: str, raw_dir: Path | None = None) -> tuple[pd.DataFrame, dict]:
+def validate_archive(
+    month: str, raw_dir: Path | None = None, exclude_truncated: bool = False
+) -> tuple[pd.DataFrame, dict]:
     path = archive_path(month, raw_dir)
     digest = verify_checksum(path)
-    frame = read_archive(path, month)
+    frame = read_archive(path, month, exclude_truncated)
     report = validate_candles(frame, month)
     report.update(sha256=digest, source=f"{BASE_URL}/{path.name}")
+    report["excluded_truncated_rows"] = len(frame.attrs["quarantine"])
+    report["quarantine"] = frame.attrs["quarantine"]
     path.with_suffix(".report.json").write_text(
         json.dumps(report, indent=2) + "\n", encoding="utf-8"
     )
     return frame, report
 
 
-def load_month(month: str, raw_dir: Path | None = None) -> dict:
-    frame, report = validate_archive(month, raw_dir)
-    if not report["valid"]:
+def load_month(
+    month: str,
+    raw_dir: Path | None = None,
+    allow_gaps: bool = False,
+    exclude_truncated: bool = False,
+) -> dict:
+    if exclude_truncated and not allow_gaps:
+        raise ValueError("Excluir velas truncadas requiere aceptar explícitamente los huecos")
+    frame, report = validate_archive(month, raw_dir, exclude_truncated)
+    gaps_only = (
+        report["rows"] > 0
+        and report["missing_minutes"] > 0
+        and report["duplicate_rows"] == 0
+        and report["invalid_rows"] == 0
+        and report["ordered"]
+    )
+    if not report["valid"] and not (allow_gaps and gaps_only):
         raise ValueError("Validación rechazada: " + json.dumps(report))
     # Explicit namespace prevents future spot/futures collisions in the existing schema.
     rows = [
@@ -190,6 +227,7 @@ def load_month(month: str, raw_dir: Path | None = None) -> dict:
         IS DISTINCT FROM (EXCLUDED.open,EXCLUDED.high,EXCLUDED.low,EXCLUDED.close,EXCLUDED.volume,EXCLUDED.trades)
     """
     written = 0
+    removed = 0
     connection = psycopg2.connect(settings.database.url, connect_timeout=10)
     try:
         with connection, connection.cursor() as cursor:
@@ -197,6 +235,23 @@ def load_month(month: str, raw_dir: Path | None = None) -> dict:
             for offset in range(0, len(rows), 2000):
                 execute_values(cursor, query, rows[offset : offset + 2000], page_size=2000)
                 written += cursor.rowcount
+            if allow_gaps and report["missing_minutes"] > 0:
+                # Reconcile a revised archive that removed a previously imported candle.
+                # Only this exact market/month is affected, within the same transaction.
+                start, stop = month_bounds(month)
+                cursor.execute(
+                    """DELETE FROM ohlcv WHERE symbol='BTC/USDT' AND exchange='binance_spot'
+                    AND timeframe='1m' AND time >= %s AND time < %s
+                    AND NOT (time = ANY(%s))""",
+                    (start, stop, [row[0] for row in rows]),
+                )
+                removed = cursor.rowcount
     finally:
         connection.close()
-    return {**report, "database_exchange": "binance_spot", "written_rows": written}
+    return {
+        **report,
+        "database_exchange": "binance_spot",
+        "written_rows": written,
+        "removed_rows": removed,
+        "accepted_with_gaps": bool(not report["valid"] and allow_gaps and gaps_only),
+    }

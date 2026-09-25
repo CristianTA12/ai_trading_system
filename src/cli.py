@@ -107,6 +107,29 @@ def paper_trade() -> None:
     click.echo("⚠️  No implementado todavía (Fase 6)")
 
 
+@main.command("sync-history")
+@click.option("--start", required=True, help="Primer mes YYYY-MM, incluido")
+@click.option("--end", default=default_month, help="Último mes YYYY-MM, incluido")
+@click.option("--raw-dir", type=click.Path(path_type=Path, file_okay=False), default=None)
+@click.option("--allow-gaps", is_flag=True, help="Conservar huecos de origen, sin inventar velas")
+@click.option(
+    "--exclude-truncated", is_flag=True, help="Excluir y registrar velas de origen menores de 1m"
+)
+def sync_history_command(
+    start: str, end: str, raw_dir: Path | None, allow_gaps: bool, exclude_truncated: bool
+) -> None:
+    """Descargar, validar y cargar un rango de meses; repetir reanuda sin duplicados."""
+    from src.data.downloaders.history import sync_history
+
+    try:
+        report = sync_history(start, end, raw_dir, allow_gaps, exclude_truncated=exclude_truncated)
+    except (ValueError, OSError) as exc:
+        raise click.ClickException(str(exc)) from exc
+    if not report["complete"]:
+        raise click.ClickException("Hay meses fallidos: consulta data/reports/history-*.json")
+    click.echo(f"Histórico cargado: {len(report['months'])} meses")
+
+
 @main.command()
 def live_trade() -> None:
     """Iniciar trading real (¡CUIDADO!)."""
@@ -116,6 +139,27 @@ def live_trade() -> None:
     click.echo("💰 Iniciando trading real...")
     # TODO: Implementar en Fase 15
     click.echo("⚠️  No implementado todavía (Fase 15)")
+
+
+@main.command("build-features")
+@click.option("--start", required=True, help="Primer mes YYYY-MM")
+@click.option("--end", default=default_month)
+@click.option("--output", type=click.Path(path_type=Path, file_okay=False), default=None)
+@click.option("--train-end", default="2024-01-01", help="Fin exclusivo de entrenamiento, UTC")
+@click.option("--validation-end", default="2025-01-01", help="Fin exclusivo de validación, UTC")
+def build_features_command(
+    start: str, end: str, output: Path | None, train_end: str, validation_end: str
+) -> None:
+    """Exportar velas 15m, variables causales, objetivos y particiones temporales."""
+    from src.features.dataset import export_dataset
+
+    try:
+        report = export_dataset(start, end, output, train_end, validation_end)
+    except (ValueError, OSError) as exc:
+        raise click.ClickException(str(exc)) from exc
+    except psycopg2.Error as exc:
+        raise click.ClickException("Error PostgreSQL: comprueba DATABASE_URL y make up") from exc
+    click.echo(json.dumps(report, indent=2))
 
 
 @main.command()
