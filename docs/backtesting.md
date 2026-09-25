@@ -115,7 +115,8 @@ La primera comparación es descriptiva sobre un único año de validación. Comp
 Buy & Hold, costes y drawdown antes de buscar más complejidad. Una mejora posterior
 debe elegirse con validación walk-forward interna de train; repetir ajustes sobre 2024
 convierte ese año en conjunto de desarrollo. Mantener el test reservado hasta fijar
-el procedimiento y los costes. Esta fase no implementa todavía walk-forward ni trading real.
+el procedimiento y los costes. El [diagnóstico y walk-forward interno](xgboost-diagnostics.md)
+amplía esta primera comparación. El trading real permanece fuera de esta fase.
 
 ## Primera ejecución verificada (25-09-2026)
 

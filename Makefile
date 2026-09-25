@@ -1,4 +1,4 @@
-.PHONY: help setup up down restart logs test lint format check clean download-data validate-data load-data setup-dashboard sync-history build-features backtest train-xgboost
+.PHONY: help setup up down restart logs test lint format check clean download-data validate-data load-data setup-dashboard sync-history build-features backtest train-xgboost diagnose-xgboost walk-forward
 
 help: ## Mostrar ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
@@ -109,8 +109,11 @@ train-xgboost: ## Entrenar modelo XGBoost
 train-transformer: ## Entrenar modelo Transformer
 	python -m src.training.train_transformer
 
-walk-forward: ## Ejecutar walk-forward validation
-	python -m src.training.walk_forward
+diagnose-xgboost: ## Diagnosticar exposición y costes del baseline en validation
+	python -m src.training.diagnose_xgboost $(DATA_ARGS)
+
+walk-forward: ## Evaluar cuatro folds temporales internos de train
+	python -m src.training.walk_forward $(DATA_ARGS)
 
 backtest: ## Ejecutar backtest
 	python -m src.backtesting.run_backtest $(DATA_ARGS)

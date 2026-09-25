@@ -34,7 +34,11 @@ def track_results(output: Path, metrics: dict, params: dict, uri: str, experimen
             "MLflow requiere un experimento nuevo con proxy de artifacts; consulta docs/backtesting.md"
         )
     run = client.create_run(
-        experiment_id, tags={"mlflow.runName": output.name, "partition": "validation"}
+        experiment_id,
+        tags={
+            "mlflow.runName": output.name,
+            "partition": str(params.get("partition", "validation")),
+        },
     )
     run_id = run.info.run_id
     try:

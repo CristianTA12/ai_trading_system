@@ -42,6 +42,24 @@ def encode_classes(returns: pd.Series, threshold: float) -> np.ndarray:
     return np.where(returns < -threshold, 0, np.where(returns > threshold, 2, 1))
 
 
+def position_targets(predictions: pd.DataFrame, confidence: float) -> pd.Series:
+    """Preserve the UP argmax requirement when varying the confidence floor."""
+    probability = predictions[["p_down", "p_neutral", "p_up"]].to_numpy()
+    if (
+        not 0 <= confidence <= 1
+        or not np.isfinite(probability).all()
+        or (probability < 0).any()
+        or (probability > 1).any()
+        or not np.allclose(probability.sum(axis=1), 1, atol=1e-6)
+    ):
+        raise ValueError("Probabilidades o confidence inválidos")
+    return pd.Series(
+        ((probability.argmax(axis=1) == 2) & (probability[:, 2] >= confidence)).astype(int),
+        index=predictions.index,
+        name="target_position",
+    )
+
+
 def fit_predict(data: ExperimentData, config: ModelConfig) -> tuple:
     train_y = encode_classes(data.train_returns, config.threshold)
     validation_y = encode_classes(data.validation_returns, config.threshold)
@@ -71,9 +89,7 @@ def fit_predict(data: ExperimentData, config: ModelConfig) -> tuple:
         probability, index=data.validation_features.index, columns=["p_down", "p_neutral", "p_up"]
     )
     predictions["predicted_class"] = predicted
-    predictions["target_position"] = (
-        (predicted == 2) & (probability[:, 2] >= config.confidence)
-    ).astype(int)
+    predictions["target_position"] = position_targets(predictions, config.confidence)
     report = {
         "config": asdict(config),
         "classes": {"0": "DOWN", "1": "NEUTRAL", "2": "UP"},

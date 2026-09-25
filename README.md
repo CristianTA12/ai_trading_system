@@ -102,4 +102,6 @@ Para varios años y variables causales de 15m: [dataset para backtesting](docs/b
 
 Para comparar estrategias y entrenar el primer modelo: [backtesting y XGBoost](docs/backtesting.md).
 
+Para investigar exposición y costes: [diagnósticos y walk-forward interno](docs/xgboost-diagnostics.md).
+
 Ver [implementation_plan_ai_trading.md](implementation_plan_ai_trading.md) para el plan completo.

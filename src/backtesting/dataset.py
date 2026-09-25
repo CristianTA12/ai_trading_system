@@ -20,6 +20,7 @@ class ExperimentData:
     validation_returns: pd.Series
     validation_bars: pd.DataFrame
     benchmark_features: pd.DataFrame
+    train_bars: pd.DataFrame | None = None
 
 
 def load_dataset(path: Path) -> ExperimentData:
@@ -75,4 +76,5 @@ def load_dataset(path: Path) -> ExperimentData:
         *subsets["validation"],
         bars.loc[(bars.index >= start) & (bars.index < stop)],
         features.loc[(features.index >= start) & (features.index < stop)],
+        bars.loc[bars.index < start],
     )
