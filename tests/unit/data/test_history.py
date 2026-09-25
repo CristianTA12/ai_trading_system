@@ -30,8 +30,8 @@ def test_failure_is_recorded_and_other_months_continue(tmp_path, monkeypatch):
     assert json.loads(path.read_text()) == result
 
 
-@pytest.mark.parametrize("duration,can_quarantine", [(30000, True), (-1, False), (60000, False)])
-def test_truncated_candle_policy(make_archive, duration, can_quarantine):
+@pytest.mark.parametrize("duration", [30000, -1, 60000])
+def test_candle_duration_quarantine_policy(make_archive, duration):
     path, root = make_archive()
     with ZipFile(path) as archive:
         rows = archive.read(path.with_suffix(".csv").name).decode().splitlines()
@@ -45,12 +45,9 @@ def test_truncated_candle_policy(make_archive, duration, can_quarantine):
     )
     with pytest.raises(ValueError, match="Duración"):
         read_archive(path, "2024-02")
-    if can_quarantine:
-        _, report = validate_archive("2024-02", root, exclude_truncated=True)
-        assert report["excluded_truncated_rows"] == 1
-        assert report["missing_minutes"] == 1
-        assert report["quarantine"][0]["csv_row"] == 11
-        assert not report["valid"]
-    else:
-        with pytest.raises(ValueError, match="Duración"):
-            read_archive(path, "2024-02", exclude_truncated=True)
+    _, report = validate_archive("2024-02", root, quarantine_duration_errors=True)
+    assert report["quarantined_duration_rows"] == 1
+    assert report["missing_minutes"] == 1
+    assert report["quarantine"][0]["csv_row"] == 11
+    assert report["quarantine"][0]["duration_in_source_units"] == duration
+    assert not report["valid"]

@@ -111,7 +111,7 @@ def download_archive(month: str, raw_dir: Path | None = None, refresh: bool = Fa
     return path
 
 
-def read_archive(path: Path, month: str, exclude_truncated: bool = False) -> pd.DataFrame:
+def read_archive(path: Path, month: str, quarantine_duration_errors: bool = False) -> pd.DataFrame:
     """Parse timestamps explicitly: spot switches from ms to us in January 2025."""
     month_bounds(month)
     try:
@@ -143,11 +143,8 @@ def read_archive(path: Path, month: str, exclude_truncated: bool = False) -> pd.
         frame["time"] = pd.to_datetime(frame["timestamp"], unit=unit, utc=True)
         expected_duration = 60_000_000 - 1 if unit == "us" else 60_000 - 1
         duration = frame["close_time"] - frame["timestamp"]
-        truncated = (duration >= 0) & (duration < expected_duration)
         invalid_duration = duration != expected_duration
-        if invalid_duration.any() and (
-            not exclude_truncated or (invalid_duration & ~truncated).any()
-        ):
+        if invalid_duration.any() and not quarantine_duration_errors:
             raise ValueError("Duración de vela incorrecta o vela sin cerrar")
         quarantine = [
             {
@@ -155,12 +152,12 @@ def read_archive(path: Path, month: str, exclude_truncated: bool = False) -> pd.
                 "time": frame.loc[i, "time"].isoformat(),
                 "duration_in_source_units": int(duration.loc[i]),
                 "unit": unit,
-                "reason": "truncated_source_candle",
+                "reason": "invalid_source_candle_duration",
             }
-            for i in frame.index[truncated]
+            for i in frame.index[invalid_duration]
         ]
         result = frame.loc[
-            ~truncated, ["time", "open", "high", "low", "close", "volume", "trades"]
+            ~invalid_duration, ["time", "open", "high", "low", "close", "volume", "trades"]
         ].copy()
         result.attrs["quarantine"] = quarantine
         return result
@@ -169,14 +166,14 @@ def read_archive(path: Path, month: str, exclude_truncated: bool = False) -> pd.
 
 
 def validate_archive(
-    month: str, raw_dir: Path | None = None, exclude_truncated: bool = False
+    month: str, raw_dir: Path | None = None, quarantine_duration_errors: bool = False
 ) -> tuple[pd.DataFrame, dict]:
     path = archive_path(month, raw_dir)
     digest = verify_checksum(path)
-    frame = read_archive(path, month, exclude_truncated)
+    frame = read_archive(path, month, quarantine_duration_errors)
     report = validate_candles(frame, month)
     report.update(sha256=digest, source=f"{BASE_URL}/{path.name}")
-    report["excluded_truncated_rows"] = len(frame.attrs["quarantine"])
+    report["quarantined_duration_rows"] = len(frame.attrs["quarantine"])
     report["quarantine"] = frame.attrs["quarantine"]
     path.with_suffix(".report.json").write_text(
         json.dumps(report, indent=2) + "\n", encoding="utf-8"
@@ -188,11 +185,11 @@ def load_month(
     month: str,
     raw_dir: Path | None = None,
     allow_gaps: bool = False,
-    exclude_truncated: bool = False,
+    quarantine_duration_errors: bool = False,
 ) -> dict:
-    if exclude_truncated and not allow_gaps:
-        raise ValueError("Excluir velas truncadas requiere aceptar explícitamente los huecos")
-    frame, report = validate_archive(month, raw_dir, exclude_truncated)
+    if quarantine_duration_errors and not allow_gaps:
+        raise ValueError("Poner velas en cuarentena requiere aceptar explícitamente los huecos")
+    frame, report = validate_archive(month, raw_dir, quarantine_duration_errors)
     gaps_only = (
         report["rows"] > 0
         and report["missing_minutes"] > 0

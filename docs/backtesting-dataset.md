@@ -5,7 +5,7 @@
 Desde Ubuntu/WSL, activar el entorno Python y ejecutar:
 
 ```bash
-make sync-history DATA_ARGS="--start 2020-01 --end 2026-08 --allow-gaps --exclude-truncated"
+make sync-history DATA_ARGS="--start 2020-01 --end 2026-08 --allow-gaps --quarantine-duration-errors"
 ```
 
 Los extremos son meses incluidos. Sin `--end`, se selecciona el último mes
@@ -24,11 +24,11 @@ Dos opciones explícitas permiten conservar un histórico real con discontinuida
 
 - `--allow-gaps`: acepta únicamente ausencia de minutos, manteniendo el rechazo
   de precios inválidos, duplicados y fechas desordenadas. No rellena huecos.
-- `--exclude-truncated`: requiere la anterior; excluye velas cuyo cierre en el
-  archivo de origen es anterior al final de su minuto. Registra el número de
+- `--quarantine-duration-errors`: requiere la anterior; excluye velas cuya duración
+  en el archivo de origen no corresponde a un minuto. Registra el número de
   fila, timestamp y duración en `quarantine` dentro del informe de cada mes.
-  Las filas originales siguen disponibles en el ZIP. Duraciones negativas o
-  mayores a un minuto se rechazan.
+  Las filas originales siguen disponibles en el ZIP. Incluye duraciones
+  truncadas, negativas o mayores a un minuto; sin esta opción se rechaza el mes.
 
 El informe mensual mantiene `valid=false` cuando falta algún minuto, aunque la
 carga con esta política se acepte (`accepted_with_gaps=true`). Los comandos

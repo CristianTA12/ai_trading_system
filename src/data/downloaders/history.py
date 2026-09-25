@@ -28,18 +28,18 @@ def sync_history(
     raw_dir: Path | None = None,
     allow_gaps: bool = False,
     report_path: Path | None = None,
-    exclude_truncated: bool = False,
+    quarantine_duration_errors: bool = False,
 ) -> dict:
     months = month_range(start, end)
-    if exclude_truncated and not allow_gaps:
-        raise ValueError("--exclude-truncated requiere --allow-gaps")
+    if quarantine_duration_errors and not allow_gaps:
+        raise ValueError("--quarantine-duration-errors requiere --allow-gaps")
     destination = report_path or PROJECT_ROOT / "data" / "reports" / f"history-{start}-{end}.json"
     destination.parent.mkdir(parents=True, exist_ok=True)
     report = {
         "start": start,
         "end": end,
         "allow_gaps": allow_gaps,
-        "exclude_truncated": exclude_truncated,
+        "quarantine_duration_errors": quarantine_duration_errors,
         "requested_months": len(months),
         "months": [],
         "complete": False,
@@ -48,7 +48,10 @@ def sync_history(
         try:
             download_archive(month, raw_dir)
             result = load_month(
-                month, raw_dir, allow_gaps=allow_gaps, exclude_truncated=exclude_truncated
+                month,
+                raw_dir,
+                allow_gaps=allow_gaps,
+                quarantine_duration_errors=quarantine_duration_errors,
             )
             result["status"] = "loaded"
             print(

@@ -113,16 +113,20 @@ def paper_trade() -> None:
 @click.option("--raw-dir", type=click.Path(path_type=Path, file_okay=False), default=None)
 @click.option("--allow-gaps", is_flag=True, help="Conservar huecos de origen, sin inventar velas")
 @click.option(
-    "--exclude-truncated", is_flag=True, help="Excluir y registrar velas de origen menores de 1m"
+    "--quarantine-duration-errors",
+    is_flag=True,
+    help="Excluir y registrar velas con duración incorrecta",
 )
 def sync_history_command(
-    start: str, end: str, raw_dir: Path | None, allow_gaps: bool, exclude_truncated: bool
+    start: str, end: str, raw_dir: Path | None, allow_gaps: bool, quarantine_duration_errors: bool
 ) -> None:
     """Descargar, validar y cargar un rango de meses; repetir reanuda sin duplicados."""
     from src.data.downloaders.history import sync_history
 
     try:
-        report = sync_history(start, end, raw_dir, allow_gaps, exclude_truncated=exclude_truncated)
+        report = sync_history(
+            start, end, raw_dir, allow_gaps, quarantine_duration_errors=quarantine_duration_errors
+        )
     except (ValueError, OSError) as exc:
         raise click.ClickException(str(exc)) from exc
     if not report["complete"]:
