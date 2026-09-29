@@ -1,0 +1,59 @@
+criterio_prospectivo:
+  nombre: risk-return-v1
+  fecha: "2026-09-29"
+  status: acordado_exploratorio
+  alcance: "Nuevas recetas; no reclasifica las nueve variantes anteriores"
+  evaluador_automatico: pendiente
+  folds: ["2022 H1", "2022 H2", "2023 H1", "2023 H2"]
+  semillas: [42, 123, 456, 789, 2026]
+  costes_por_ejecucion:
+    fee_taker: 0.0004
+    slippage_base: 0.0001
+    slippage_stress: 0.0002
+  metricas:
+    sharpe: "Retornos diarios UTC, incluidos días en efectivo; sqrt(365), ddof=1, rf=0"
+    sharpe_sin_varianza: null
+    drawdown: "Magnitud positiva; equity neta al cierre de cada vela, incluido capital inicial"
+    concatenacion: "Normalizar cada curva por su equity inicial y escalar por el cierre anterior"
+    posiciones_entre_folds: false
+    referencia: "Buy & Hold neto, mismas velas y costes base"
+  gates:
+    rentabilidad:
+      escenario: base
+      formula: "prod(1 + retorno_neto_fold) - 1 > 0"
+    riesgo_absoluto:
+      escenario: base
+      max_drawdown: 0.15
+      aplicar_a: [cada_fold, curva_concatenada]
+      operador: "<="
+    consistencia:
+      escenario: base
+      min_semestres: 3
+      regla: "Sharpe candidato > Sharpe B&H AND DD candidato <= DD B&H"
+      excepcion_cash: "Sin posiciones ni ejecuciones en todo el fold, equity constante y retorno B&H < 0"
+      sharpe_indefinido_fuera_de_excepcion: no_cumple
+    fricciones:
+      escenario: stress
+      formula: "prod(1 + retorno_neto_fold_stress) - 1 > 0"
+      politica: "Mismas predicciones y reglas; recalcular ejecución y equity con slippage de 2 pb"
+      exigir_otros_gates_en_stress: false
+    estabilidad:
+      min_semillas: 4
+      total_semillas: 5
+      regla: "Cada semilla debe superar conjuntamente rentabilidad, riesgo, consistencia y fricciones"
+      seleccion_de_mejor_semilla: false
+  gate_historico:
+    regla: "Retorno neto estrictamente positivo en >=3/4 semestres"
+    status: referencia_en_informes
+  datos:
+    folds_internos: "Train expansivo y purga de labels; mismos timestamps para candidato y control"
+    validacion_2024: "Ya explorada; no constituye confirmación independiente"
+    test_2025_2026: reservado
+  si_supera:
+    - "Congelar receta y fijar protocolo de evaluación final antes de abrir test"
+    - "Fijar uso de semillas o ensemble sin seleccionar por resultados de test"
+    - "Evaluar test una vez, sin reajustes, con artifacts y MLflow"
+  si_no_supera:
+    - "Registrar rechazo y todos los resultados de las cinco semillas"
+    - "Cualquier revisión requiere nueva versión prospectiva y justificación"
+  autorizacion_dinero_real: false
