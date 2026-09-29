@@ -59,6 +59,7 @@ dependencies = [
     "structlog>=23.2",              # Logging estructurado
     "click>=8.1",                   # CLI
     "python-dotenv>=1.0",           # .env loader
+    "PyYAML>=6.0",                  # Criterios experimentales versionados
     "tenacity>=8.2",                # Retry logic
     "schedule>=1.2",                # Task scheduling
     "rich>=13.7",                   # Terminal output bonito
