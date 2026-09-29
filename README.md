@@ -110,4 +110,9 @@ Para la comparación de features de régimen: [protocolo v2](docs/features-v2-pr
 
 Para aislar el contexto secuencial corto: [protocolo de ablación de lags](docs/lags-ablation-protocol.md) y [resultados](docs/lags-ablation-results.md).
 
+Para incorporar funding liquidado: [protocolo de iteración 11](docs/iteration-11-protocol.md)
+y [resultados](docs/iteration-11-results.md) (rechazado: 0/5 semillas).
+El comando `make experiment-funding` compara funding y v1 emparejado en cinco semillas,
+con disponibilidad temporal asumida explícitamente y criterio `risk-return-v1`.
+
 Ver [implementation_plan_ai_trading.md](implementation_plan_ai_trading.md) para el plan completo.
