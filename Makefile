@@ -127,6 +127,10 @@ experiment-regime: ## Features v2 frente a v1 con cobertura idéntica y holding 
 experiment-lags: ## Ablación de tres lags frente a v1 con cobertura idéntica
 	python -m src.training.regime_experiment --variant lags $(DATA_ARGS)
 
+.PHONY: experiment-regression
+experiment-regression: ## Iteración 10: regresión y control, cuatro folds y cinco semillas
+	python -m src.training.regression_experiment $(DATA_ARGS)
+
 backtest: ## Ejecutar backtest
 	python -m src.backtesting.run_backtest $(DATA_ARGS)
 

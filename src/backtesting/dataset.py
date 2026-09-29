@@ -23,7 +23,7 @@ class ExperimentData:
     train_bars: pd.DataFrame | None = None
 
 
-def load_dataset(path: Path) -> ExperimentData:
+def load_dataset(path: Path, *, train_only: bool = False) -> ExperimentData:
     metadata = json.loads((path / "metadata.json").read_text(encoding="utf-8"))
     frames = {}
     for name in ("bars", "features", "labels", "splits"):
@@ -53,6 +53,9 @@ def load_dataset(path: Path) -> ExperimentData:
         raise ValueError("Particiones inválidas")
     subsets = {}
     for name, lower, upper in (("train", None, start), ("validation", start, stop)):
+        if train_only and name == "validation":
+            subsets[name] = (features.iloc[:0], labels.target_return_next_15m.iloc[:0])
+            continue
         index = splits.index[splits.split == name]
         outcomes = labels.loc[index]
         if (
@@ -74,7 +77,9 @@ def load_dataset(path: Path) -> ExperimentData:
         metadata,
         *subsets["train"],
         *subsets["validation"],
-        bars.loc[(bars.index >= start) & (bars.index < stop)],
-        features.loc[(features.index >= start) & (features.index < stop)],
+        bars.iloc[:0] if train_only else bars.loc[(bars.index >= start) & (bars.index < stop)],
+        features.iloc[:0]
+        if train_only
+        else features.loc[(features.index >= start) & (features.index < stop)],
         bars.loc[bars.index < start],
     )

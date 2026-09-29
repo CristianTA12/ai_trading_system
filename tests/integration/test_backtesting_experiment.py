@@ -76,6 +76,15 @@ def test_train_only_fit_and_validation_only_predictions(dataset, monkeypatch):
     assert predictions.index.max() < pd.Timestamp("2024-01-04", tz="UTC")
 
 
+def test_internal_loader_excludes_outer_partitions(dataset):
+    data = load_dataset(dataset, train_only=True)
+    assert data.validation_features.empty
+    assert data.validation_returns.empty
+    assert data.validation_bars.empty
+    assert data.benchmark_features.empty
+    assert data.train_features.index.max() < pd.Timestamp("2024-01-01", tz="UTC")
+
+
 def test_complete_experiment_and_model_reload(dataset, tmp_path):
     output = tmp_path / "experiment"
     report = run_experiment(
