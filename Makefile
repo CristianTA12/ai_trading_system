@@ -131,6 +131,10 @@ experiment-lags: ## Ablación de tres lags frente a v1 con cobertura idéntica
 experiment-regression: ## Iteración 10: regresión y control, cuatro folds y cinco semillas
 	python -m src.training.regression_experiment $(DATA_ARGS)
 
+.PHONY: experiment-funding
+experiment-funding: ## Iteración 11: funding y v1 emparejado, cuatro folds y cinco semillas
+	python -m src.training.funding_experiment $(DATA_ARGS)
+
 backtest: ## Ejecutar backtest
 	python -m src.backtesting.run_backtest $(DATA_ARGS)
 

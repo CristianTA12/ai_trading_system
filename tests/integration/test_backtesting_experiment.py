@@ -76,8 +76,20 @@ def test_train_only_fit_and_validation_only_predictions(dataset, monkeypatch):
     assert predictions.index.max() < pd.Timestamp("2024-01-04", tz="UTC")
 
 
-def test_internal_loader_excludes_outer_partitions(dataset):
+def test_internal_loader_excludes_outer_partitions(dataset, monkeypatch):
+    original_read = pd.read_parquet
+    observed = []
+
+    def read_filtered(*args, **kwargs):
+        assert kwargs.get("filters")
+        frame = original_read(*args, **kwargs)
+        assert frame.index.max() < pd.Timestamp("2024-01-01", tz="UTC")
+        observed.append(frame)
+        return frame
+
+    monkeypatch.setattr(pd, "read_parquet", read_filtered)
     data = load_dataset(dataset, train_only=True)
+    assert len(observed) == 4
     assert data.validation_features.empty
     assert data.validation_returns.empty
     assert data.validation_bars.empty

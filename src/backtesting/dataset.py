@@ -7,6 +7,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import pyarrow.parquet as pq
 
 from src.backtesting.engine import STEP, validate_index
 
@@ -25,6 +26,7 @@ class ExperimentData:
 
 def load_dataset(path: Path, *, train_only: bool = False) -> ExperimentData:
     metadata = json.loads((path / "metadata.json").read_text(encoding="utf-8"))
+    start = pd.Timestamp(metadata["train_end"], tz="UTC")
     frames = {}
     for name in ("bars", "features", "labels", "splits"):
         filename = f"{name}.parquet"
@@ -32,7 +34,16 @@ def load_dataset(path: Path, *, train_only: bool = False) -> ExperimentData:
             digest = hashlib.file_digest(stream, "sha256").hexdigest()
         if digest != metadata["sha256"][filename]:
             raise ValueError(f"Checksum incorrecto: {filename}")
-        frames[name] = pd.read_parquet(path / filename)
+        # Hash the immutable artifact, but do not deserialize held-out observations
+        # for an internal walk-forward experiment.
+        filters = None
+        if train_only:
+            schema = pq.read_schema(path / filename)
+            index_columns = json.loads(schema.metadata[b"pandas"])["index_columns"]
+            if len(index_columns) != 1 or not isinstance(index_columns[0], str):
+                raise ValueError("El dataset requiere un índice temporal materializado")
+            filters = [(index_columns[0], "<", start)]
+        frames[name] = pd.read_parquet(path / filename, filters=filters if train_only else None)
         validate_index(frames[name].index)
     bars, features, labels, splits = (
         frames[name] for name in ("bars", "features", "labels", "splits")
@@ -78,8 +89,10 @@ def load_dataset(path: Path, *, train_only: bool = False) -> ExperimentData:
         *subsets["train"],
         *subsets["validation"],
         bars.iloc[:0] if train_only else bars.loc[(bars.index >= start) & (bars.index < stop)],
-        features.iloc[:0]
-        if train_only
-        else features.loc[(features.index >= start) & (features.index < stop)],
+        (
+            features.iloc[:0]
+            if train_only
+            else features.loc[(features.index >= start) & (features.index < stop)]
+        ),
         bars.loc[bars.index < start],
     )
