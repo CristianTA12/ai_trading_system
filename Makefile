@@ -135,6 +135,10 @@ experiment-regression: ## Iteración 10: regresión y control, cuatro folds y ci
 experiment-funding: ## Iteración 11: funding y v1 emparejado, cuatro folds y cinco semillas
 	python -m src.training.funding_experiment $(DATA_ARGS)
 
+.PHONY: experiment-regime-gate
+experiment-regime-gate: ## Iteración 12: filtro diario sobre predicciones v1 congeladas
+	python -m src.training.regime_gate_experiment $(DATA_ARGS)
+
 backtest: ## Ejecutar backtest
 	python -m src.backtesting.run_backtest $(DATA_ARGS)
 
