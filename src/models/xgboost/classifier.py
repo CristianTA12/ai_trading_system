@@ -61,8 +61,16 @@ def position_targets(predictions: pd.DataFrame, confidence: float) -> pd.Series:
 
 
 def fit_predict(data: ExperimentData, config: ModelConfig) -> tuple:
+    if not data.train_features.index.equals(
+        data.train_returns.index
+    ) or not data.validation_features.index.equals(data.validation_returns.index):
+        raise ValueError("Features y retornos deben estar alineados")
     train_y = encode_classes(data.train_returns, config.threshold)
-    validation_y = encode_classes(data.validation_returns, config.threshold)
+    # Missing future outcomes affect scoring only, never prediction availability.
+    scored = data.validation_returns.notna().to_numpy()
+    validation_y = encode_classes(data.validation_returns.dropna(), config.threshold)
+    if not len(validation_y):
+        raise ValueError("No hay outcomes completos para evaluar")
     counts = np.bincount(train_y, minlength=3)
     if (counts == 0).any():
         raise ValueError("El entrenamiento debe contener las tres clases")
@@ -90,11 +98,14 @@ def fit_predict(data: ExperimentData, config: ModelConfig) -> tuple:
     )
     predictions["predicted_class"] = predicted
     predictions["target_position"] = position_targets(predictions, config.confidence)
+    probability, predicted = probability[scored], predicted[scored]
     report = {
         "config": asdict(config),
         "classes": {"0": "DOWN", "1": "NEUTRAL", "2": "UP"},
         "train_class_counts": counts.tolist(),
         "validation_class_counts": np.bincount(validation_y, minlength=3).tolist(),
+        "scored_rows": int(scored.sum()),
+        "predictions_without_complete_outcome": int((~scored).sum()),
         "train_majority_validation_accuracy": float(np.mean(validation_y == counts.argmax())),
         "accuracy": float(accuracy_score(validation_y, predicted)),
         "balanced_accuracy": float(balanced_accuracy_score(validation_y, predicted)),

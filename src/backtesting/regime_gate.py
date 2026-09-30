@@ -42,7 +42,12 @@ def daily_regime(bars: pd.DataFrame, decisions: pd.DatetimeIndex) -> pd.DataFram
     return result
 
 
-def gated_targets(index: pd.DatetimeIndex, predictions: pd.DataFrame, gate: pd.Series) -> pd.Series:
+def gated_targets(
+    index: pd.DatetimeIndex,
+    predictions: pd.DataFrame,
+    gate: pd.Series,
+    minimum_hold_minutes: int = 60,
+) -> pd.Series:
     """Recompute holding state; a closed/missing gate forces flat immediately.
 
     Do not multiply an ungated position series by the gate: reopening the gate
@@ -51,6 +56,6 @@ def gated_targets(index: pd.DatetimeIndex, predictions: pd.DataFrame, gate: pd.S
     validate_index(gate.index)
     if not gate.isin([True, False]).all():
         raise ValueError("El filtro debe ser booleano, sin NaN")
-    allowed = gate.reindex(predictions.index, fill_value=False)
+    allowed = gate.reindex(predictions.index, fill_value=False).astype(bool)
     entries = position_targets(predictions.loc[allowed], 0.5).astype(bool)
-    return stateful_targets(index, entries, ~entries, minimum_hold_minutes=60)
+    return stateful_targets(index, entries, ~entries, minimum_hold_minutes=minimum_hold_minutes)

@@ -139,6 +139,10 @@ experiment-funding: ## Iteración 11: funding y v1 emparejado, cuatro folds y ci
 experiment-regime-gate: ## Iteración 12: filtro diario sobre predicciones v1 congeladas
 	python -m src.training.regime_gate_experiment $(DATA_ARGS)
 
+.PHONY: experiment-four-hour
+experiment-four-hour: ## Iteración 13: horizonte 4h con filtro y controles emparejados
+	python -m src.training.four_hour_experiment $(DATA_ARGS)
+
 backtest: ## Ejecutar backtest
 	python -m src.backtesting.run_backtest $(DATA_ARGS)
 
