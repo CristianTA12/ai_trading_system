@@ -119,4 +119,9 @@ Para aislar un filtro diario de régimen sobre v1 congelado: [protocolo de itera
 y [resultados](docs/iteration-12-results.md). `make experiment-regime-gate` reproduce
 la prueba SMA50 > SMA200 sin reentrenar; mejora el riesgo, pero no supera el criterio.
 
+Para el horizonte 4h: [protocolo de iteración 13](docs/iteration-13-protocol.md)
+y [resultados](docs/iteration-13-results.md). `make experiment-four-hour` compara
+4h con/sin gate y un control 15m emparejado; el candidato cumple en 2/5 semillas,
+por debajo del mínimo 4/5 de `risk-return-v1`.
+
 Ver [implementation_plan_ai_trading.md](implementation_plan_ai_trading.md) para el plan completo.
