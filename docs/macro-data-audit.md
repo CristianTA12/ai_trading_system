@@ -8,6 +8,9 @@ El [informe de reconstrucción VIX](vix-vintage-reconstruction.md) recoge la
 verificación independiente. El [contraste con la API oficial](vix-api-crosscheck.md)
 ya terminó: 37 vintages consultadas, las 30 anomalías reproducidas y ninguna
 diferencia numérica con el gráfico. La credencial funciona; el bloqueo es temporal.
+El [contraste Cboe](vix-cboe-crosscheck.md) también confirma los 1.059 cierres
+y las doce fechas anómalas. VIX queda no aprobado con este protocolo; el
+siguiente paso es auditar vintages S&P 500 mediante la API oficial.
 
 La referencia experimental sigue siendo it.13: 4h, clases ±100 pb, holding 4h,
 gate SMA50>SMA200. It.14 no reemplaza esa referencia. Esta auditoría no entrena,
@@ -71,12 +74,13 @@ ninguna fuente del mundo las tenga ni que la serie sea necesariamente revisada.
 
 ### Decisión actual y trabajo restante
 
-- **Aclarar las anomalías VIX con evidencia de la fuente primaria.** La API
-  oficial ya reproduce los 30 casos; siguen excluidos íntegramente. Contrastar
-  calendario y valores con Cboe antes de reconsiderar esta fuente. La clave
-  `FRED_API_KEY` está configurada y validada; no falta repetir la descarga completa.
+- **Cerrar el diagnóstico VIX con fuente no aprobada.** Cboe confirma los
+  valores y documenta actividad GTH en el festivo estudiado, pero no acredita
+  su presencia en una vintage anterior. Se mantienen las 30 cuarentenas.
 - **S&P 500 pendiente de otra evidencia temporal o de un supuesto explícito.**
   El raw ya existe; el problema restante es histórico/temporal, no conectividad.
+  Siguiente comprobación: API oficial autenticada, sin extrapolar el fallo
+  previo del endpoint público de gráficos.
 - **Mantener DTWEXBGS fuera de la primera propuesta.** La revisión cuantificada
   refuerza la necesidad de modelar vintages y publicación semanal antes de usarlo.
 - No aprobar it.15. Ya se midió cobertura condicional sobre las filas congeladas

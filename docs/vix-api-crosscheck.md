@@ -2,6 +2,8 @@
 
 Fecha: 2026-10-06. Continuación de la
 [reconstrucción diaria](vix-vintage-reconstruction.md).
+Actualización: el [contraste posterior con Cboe](vix-cboe-crosscheck.md)
+confirma todos los valores actuales; la disponibilidad histórica sigue pendiente.
 
 **La autenticación funciona y la API reproduce las 30 anomalías del gráfico.**
 Se examinaron 37 vintages: las 30 en cuarentena y siete controles alrededor
