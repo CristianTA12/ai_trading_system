@@ -1,9 +1,12 @@
 # Auditoría macro — fuentes, disponibilidad y revisiones
 
 Fecha: 2026-10-06. Fase E, posterior al rechazo de it.14.
-**Actualización: descarga resuelta, snapshots acotados validados y muestras de
-vintages examinadas. La cobertura causal intradía sigue pendiente; ninguna
-fuente está todavía aprobada para entrenar it.15.**
+**Actualización: reconstrucción diaria VIX terminada y auditada: 1.522 snapshots,
+30 excluidos por observaciones posteriores a su vintage y cobertura condicional
+2023 H1 del 93,34%. Ninguna fuente está aprobada para entrenar it.15.**
+El [informe de reconstrucción VIX](vix-vintage-reconstruction.md) recoge la
+verificación independiente y sustituye el siguiente paso de extracción diaria
+por el contraste de anomalías con la API oficial.
 
 La referencia experimental sigue siendo it.13: 4h, clases ±100 pb, holding 4h,
 gate SMA50>SMA200. It.14 no reemplaza esa referencia. Esta auditoría no entrena,
@@ -67,17 +70,16 @@ ninguna fuente del mundo las tenga ni que la serie sea necesariamente revisada.
 
 ### Decisión actual y trabajo restante
 
-- **Priorizar VIX para reconstrucción point-in-time completa.** Hay acceso
-  demostrado a snapshots históricos sin credenciales, pero falta extraer las
-  versiones necesarias a lo largo de 2019–2023, establecer la disponibilidad
-  con resolución diaria y una convención intradía justificable. Una clave API
-  no es un bloqueo demostrado para esta vía pública.
+- **Contrastar las anomalías VIX con la API oficial.** La extracción diaria
+  pública 2019–2023 ya terminó. Treinta snapshots contienen fechas futuras y
+  quedan excluidos íntegramente. Falta aclarar estos casos antes de aprobar
+  la fuente; el contraste por API requiere configurar `FRED_API_KEY` localmente.
 - **S&P 500 pendiente de otra evidencia temporal o de un supuesto explícito.**
   El raw ya existe; el problema restante es histórico/temporal, no conectividad.
 - **Mantener DTWEXBGS fuera de la primera propuesta.** La revisión cuantificada
   refuerza la necesidad de modelar vintages y publicación semanal antes de usarlo.
-- No generar todavía un dataset listo para entrenar ni aprobar it.15. La
-  cobertura temporal se medirá después, sobre las filas congeladas de it.13.
+- No aprobar it.15. Ya se midió cobertura condicional sobre las filas congeladas
+  de it.13: 2023 H1 alcanza el 93,34%. Los artifacts son exclusivamente diagnósticos.
 
 Auditor adicional: [audit_macro_vintages.py](../scripts/audit_macro_vintages.py).
 **16 tests dirigidos pasan** entre ambos auditores; incluyen detección de

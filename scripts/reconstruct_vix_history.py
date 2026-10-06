@@ -32,6 +32,12 @@ POLICY = {
 }
 
 
+class FutureObservationsError(ValueError):
+    def __init__(self, dates):
+        super().__init__("Future observations in vintage")
+        self.dates = dates
+
+
 def parse_vintage(raw, day):
     frame = pd.read_csv(io.BytesIO(raw))
     expected = f"VIXCLS_{day.replace('-', '')}"
@@ -40,7 +46,11 @@ def parse_vintage(raw, day):
     frame.columns = ["observation_date", "VIXCLS"]
     frame = parse_snapshot(frame.to_csv(index=False).encode(), "VIXCLS")
     if frame.observation_date.max() > pd.Timestamp(day):
-        raise ValueError("Future observations in vintage")
+        raise FutureObservationsError(
+            frame.loc[frame.observation_date.gt(pd.Timestamp(day)), "observation_date"]
+            .dt.strftime("%Y-%m-%d")
+            .tolist()
+        )
     return frame.set_index("observation_date").value
 
 
@@ -148,18 +158,34 @@ def capture(output, curl, workers=3, resume=False):
     return records
 
 
-def reconstruct(output):
+def reconstruct(output, quarantine=False):
+    assert json.loads((output / "policy.json").read_text()) == POLICY
     records = json.loads((output / "capture.json").read_text())
     expected = pd.date_range(START, END, freq="D").strftime("%Y-%m-%d").tolist()
     assert [r["vintage_date"] for r in records] == expected
     states, events, previous = [], [], None
-    first_seen = {}
+    first_seen, quarantined = {}, []
     for record in records:
-        assert record["status"] == "validated"
         day = record["vintage_date"]
         raw = (output / "raw" / f"{day}.csv").read_bytes()
-        assert hashlib.sha256(raw).hexdigest() == record["sha256"]
-        values = parse_vintage(raw, day)
+        digest = hashlib.sha256(raw).hexdigest()
+        if "sha256" in record:
+            assert digest == record["sha256"]
+        try:
+            values = parse_vintage(raw, day)
+        except FutureObservationsError as error:
+            if not quarantine:
+                raise
+            quarantined.append(
+                {
+                    "vintage_date": day,
+                    "sha256": digest,
+                    "future_observation_dates": error.dates,
+                    "action": "exclude_entire_snapshot",
+                }
+            )
+            continue
+        assert record["status"] == "validated"
         states.append(state_from_vintage(values, day))
         for observed in values.dropna().index:
             first_seen.setdefault(str(observed.date()), day)
@@ -184,6 +210,7 @@ def reconstruct(output):
                     )
         previous = values
     states = pd.DataFrame(states)
+    (output / "quarantine.json").write_text(json.dumps(quarantined, indent=2) + "\n")
     states.to_parquet(output / "daily_states.parquet", index=False)
     pd.DataFrame(events, columns=["vintage_date", "observation_date", "kind", "old", "new"]).to_csv(
         output / "revision_events.csv", index=False
@@ -221,6 +248,9 @@ def reconstruct(output):
     pd.DataFrame(coverage).to_csv(output / "coverage.csv", index=False)
     first_seen_lags = [(pd.Timestamp(d) - pd.Timestamp(o)).days for o, d in first_seen.items()]
     result = {
+        "captured_vintages": len(records),
+        "quarantined_vintages": len(quarantined),
+        "quarantine_mode": "whole_snapshot" if quarantine else "none",
         "vintages": len(states),
         "observation_dates": len(first_seen),
         "revision_events": len(events),
@@ -244,7 +274,14 @@ if __name__ == "__main__":
     parser.add_argument("--curl-executable", default="curl")
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--offline", action="store_true")
+    parser.add_argument(
+        "--quarantine",
+        action="store_true",
+        help="Offline diagnostic only: exclude whole snapshots with future observations",
+    )
     args = parser.parse_args()
+    if args.quarantine and not args.offline:
+        parser.error("Quarantine diagnosis requires --offline; capture validation remains strict")
     if not args.offline:
         capture(args.output, args.curl_executable, resume=args.resume)
-    reconstruct(args.output)
+    reconstruct(args.output, quarantine=args.quarantine)

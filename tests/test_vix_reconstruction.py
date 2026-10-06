@@ -1,7 +1,12 @@
 import pandas as pd
 import pytest
 
-from scripts.reconstruct_vix_history import align_states, parse_vintage, state_from_vintage
+from scripts.reconstruct_vix_history import (
+    FutureObservationsError,
+    align_states,
+    parse_vintage,
+    state_from_vintage,
+)
 
 
 def snapshot(day, values):
@@ -56,3 +61,27 @@ def test_change_is_over_distinct_observations_not_daily_snapshot_repetitions():
     sunday = snapshot("2023-01-15", "2023-01-12,20\n2023-01-13,22\n")
     assert friday["vix_change_1_event"] == sunday["vix_change_1_event"] == 2
     assert friday["observation_date"] == sunday["observation_date"]
+
+
+def test_whole_snapshot_rejected_even_when_older_rows_are_valid():
+    raw = (
+        b"observation_date,VIXCLS_20230113\n2023-01-12,18.83\n2023-01-13,18.35\n2023-01-16,19.49\n"
+    )
+    with pytest.raises(FutureObservationsError) as caught:
+        parse_vintage(raw, "2023-01-13")
+    assert caught.value.dates == ["2023-01-16"]
+
+
+def test_quarantined_day_does_not_borrow_a_later_vintage():
+    # Jan 11 vintage is quarantined; Jan 12 cannot fill its gap backwards.
+    states = pd.DataFrame(
+        [
+            snapshot("2023-01-10", "2023-01-09,20\n2023-01-10,21\n"),
+            snapshot("2023-01-12", "2023-01-11,22\n2023-01-12,23\n"),
+        ]
+    )
+    result = align_states(
+        states, pd.to_datetime(["2023-01-13 00:15Z", "2023-01-14 00:00Z", "2023-01-14 00:15Z"])
+    )
+    assert result.eligible_under_assumption.tolist() == [False, False, True]
+    assert result.vix_level.iloc[:2].isna().all()
