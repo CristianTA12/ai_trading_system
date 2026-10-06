@@ -8,6 +8,7 @@ import argparse
 import hashlib
 import io
 import json
+import subprocess
 import urllib.request
 from datetime import UTC, datetime
 from pathlib import Path
@@ -17,6 +18,34 @@ import pandas as pd
 
 SERIES = ("SP500", "VIXCLS", "DTWEXBGS")
 START, END = "2019-11-01", "2023-12-31"
+
+
+def fetch_csv(url, transport="urllib", curl_executable="curl"):
+    """Selectable HTTPS transport; curl has a bounded wall-clock timeout."""
+    if transport == "curl":
+        result = subprocess.run(
+            [
+                curl_executable,
+                "--fail",
+                "--silent",
+                "--show-error",
+                "--location",
+                "--connect-timeout",
+                "8",
+                "--max-time",
+                "25",
+                url,
+            ],
+            capture_output=True,
+            check=True,
+            timeout=30,
+        )
+        return result.stdout
+    if transport != "urllib":
+        raise ValueError("Unknown transport")
+    req = urllib.request.Request(url, headers={"User-Agent": "ai-trading-system source audit"})
+    with urllib.request.urlopen(req, timeout=20) as response:
+        return response.read()
 
 
 def parse_snapshot(raw, series):
@@ -74,7 +103,7 @@ def summarize(frame):
     }
 
 
-def audit(folder, fetch=False):
+def audit(folder, fetch=False, transport="urllib", curl_executable="curl"):
     if fetch:
         folder.mkdir(parents=True, exist_ok=False)
     elif not folder.is_dir():
@@ -83,13 +112,14 @@ def audit(folder, fetch=False):
     if fetch:
         for series in SERIES:
             url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series}&cosd={START}&coed={END}"
-            record = {"series": series, "url": url, "attempted_at": datetime.now(UTC).isoformat()}
+            record = {
+                "series": series,
+                "url": url,
+                "attempted_at": datetime.now(UTC).isoformat(),
+                "transport": transport,
+            }
             try:
-                req = urllib.request.Request(
-                    url, headers={"User-Agent": "ai-trading-system source audit"}
-                )
-                with urllib.request.urlopen(req, timeout=20) as response:
-                    raw = response.read()
+                raw = fetch_csv(url, transport, curl_executable)
                 (folder / f"{series}.csv").write_bytes(raw)
                 record.update(
                     status="downloaded", sha256=hashlib.sha256(raw).hexdigest(), bytes=len(raw)
@@ -140,5 +170,7 @@ if __name__ == "__main__":
         action="store_true",
         help="Download into a NEW directory; otherwise audit offline",
     )
+    parser.add_argument("--transport", choices=("urllib", "curl"), default="urllib")
+    parser.add_argument("--curl-executable", default="curl")
     args = parser.parse_args()
-    audit(args.folder, args.fetch)
+    audit(args.folder, args.fetch, args.transport, args.curl_executable)

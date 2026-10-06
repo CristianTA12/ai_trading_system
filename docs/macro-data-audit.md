@@ -1,14 +1,100 @@
 # Auditoría macro — fuentes, disponibilidad y revisiones
 
 Fecha: 2026-10-06. Fase E, posterior al rechazo de it.14.
-**Revisión documental realizada; cobertura cuantitativa pendiente por fallo
-de descarga. Ninguna fuente está todavía aprobada para entrenar it.15.**
+**Actualización: descarga resuelta, snapshots acotados validados y muestras de
+vintages examinadas. La cobertura causal intradía sigue pendiente; ninguna
+fuente está todavía aprobada para entrenar it.15.**
 
 La referencia experimental sigue siendo it.13: 4h, clases ±100 pb, holding 4h,
 gate SMA50>SMA200. It.14 no reemplaza esa referencia. Esta auditoría no entrena,
 no ejecuta backtests y no abre datos BTC de 2024 ni test 2025–2026.
 
-## Decisión provisional por fuente
+## Actualización cuantitativa — acceso resuelto
+
+El reintento con `curl.exe` de Windows obtuvo HTTP 200 para las tres series,
+manteniendo HTTPS con verificación de certificados y tiempos de espera acotados.
+No fue necesario desactivar TLS ni crear una cuenta. El fallo anterior no
+permite concluir si la causa fue transitoria, del cliente o de otra capa de red.
+El auditor admite ahora transporte `curl`, incluido el ejecutable Windows desde WSL.
+
+Raw y checksums en `data/external/macro-audit-20261006-retry/`.
+Todos los snapshots contienen 1.086 filas laborables entre 2019-11-01 y
+2023-12-29; no incluyen observaciones de 2024–2026. Fechas únicas, ordenadas,
+valores no nulos positivos y finitos. Los nulos originales se conservan.
+
+| Serie | Valores no nulos | Nulos | Mayor intervalo entre valores | 2022 H1 | 2022 H2 | 2023 H1 | 2023 H2 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| SP500 | 1.047 | 39 | 4 días | 124 | 127 | 124 | 126 |
+| VIXCLS | 1.059 | 27 | 4 días | 126 | 130 | 128 | 129 |
+| DTWEXBGS | 1.037 | 49 | 5 días | 125 | 125 | 125 | 124 |
+
+Son conteos de observaciones, **no porcentajes de cobertura causal sobre barras
+BTC**. Las ausencias incluyen festivos; el auditor no las confunde con fallos
+de datos. Existen doce fechas con VIX informado y S&P ausente, todas con VIX
+distinto del valor anterior. Se conservan en `vix_without_sp500.csv`: no se
+eliminan ni se etiquetan automáticamente como forward-fill. Esta evidencia
+obliga a verificar el calendario específico VIX, no reutilizar el de acciones.
+
+### Versiones históricas obtenidas sin API key
+
+El endpoint público de gráficos ALFRED respondió a solicitudes con
+`vintage_date` explícita. Se exigió encabezado `SERIE_YYYYMMDD`, fechas dentro
+de la ventana auditada y ninguna observación posterior a la vintage. Los
+ficheros y comparaciones quedan conservados; la prueba no se basa solo en HTTP 200.
+ALFRED describe las vintages como datos existentes en una fecha histórica.
+[Ayuda oficial](https://alfred.stlouisfed.org/help/downloaddata).
+
+| Serie / vintage solicitada | Valores comparables con snapshot actual | Valores distintos |
+|---|---:|---:|
+| VIXCLS / 2019-12-31 | 41 | 0 |
+| VIXCLS / 2020-12-31 | 294 | 0 |
+| VIXCLS / 2021-12-31 | 546 | 0 |
+| VIXCLS / 2022-12-31 | 802 | 0 |
+| VIXCLS / 2023-12-31 | 1.059 | 0 |
+| DTWEXBGS / 2023-01-10 | 792 | **791** |
+
+También se conserva una muestra VIX del 2023-01-10. Las muestras VIX anuales
+no prueban ausencia de revisiones entre esas fechas ni disponibilidad intradía.
+No se suman sus tamaños como muestras independientes: sus períodos se solapan.
+Para dólar, la máxima diferencia absoluta es **0,206 puntos de índice**, no
+20,6% ni 20,6 pb de retorno. Su última observación disponible en esa vintage
+es 2023-01-06. Hay evidencia directa de que el snapshot actual incorpora cambios
+posteriores: aplicar solo un lag no reconstruye la versión histórica.
+
+La página ALFRED de SP500 devuelve HTTP 404 y la petición de vintage al gráfico
+falla. Esto documenta que **esa vía no ha suministrado vintages SP500**, no que
+ninguna fuente del mundo las tenga ni que la serie sea necesariamente revisada.
+
+### Decisión actual y trabajo restante
+
+- **Priorizar VIX para reconstrucción point-in-time completa.** Hay acceso
+  demostrado a snapshots históricos sin credenciales, pero falta extraer las
+  versiones necesarias a lo largo de 2019–2023, establecer la disponibilidad
+  con resolución diaria y una convención intradía justificable. Una clave API
+  no es un bloqueo demostrado para esta vía pública.
+- **S&P 500 pendiente de otra evidencia temporal o de un supuesto explícito.**
+  El raw ya existe; el problema restante es histórico/temporal, no conectividad.
+- **Mantener DTWEXBGS fuera de la primera propuesta.** La revisión cuantificada
+  refuerza la necesidad de modelar vintages y publicación semanal antes de usarlo.
+- No generar todavía un dataset listo para entrenar ni aprobar it.15. La
+  cobertura temporal se medirá después, sobre las filas congeladas de it.13.
+
+Auditor adicional: [audit_macro_vintages.py](../scripts/audit_macro_vintages.py).
+**16 tests dirigidos pasan** entre ambos auditores; incluyen detección de
+parámetro vintage ignorado, fechas futuras, revisiones y errores HTTP.
+
+```bash
+# Transporte que ha funcionado, invocado desde el entorno Python WSL:
+python scripts/audit_macro_sources.py data/external/<carpeta-nueva> --fetch \
+  --transport curl --curl-executable /mnt/c/Windows/System32/curl.exe
+python -m scripts.audit_macro_vintages data/external/macro-audit-20261006-retry
+pytest tests/test_macro_source_audit.py tests/test_macro_vintages.py -q
+```
+
+Los apartados siguientes conservan el razonamiento documental y el historial
+del primer intento; su bloqueo de descarga quedó resuelto en esta actualización.
+
+## Evaluación documental inicial por fuente
 
 | Propuesta | Fuente examinada | Cobertura documental | Disponibilidad histórica | Decisión |
 |---|---|---|---|---|
@@ -99,7 +185,7 @@ ninguna credencial en esta tarea.
 [API observations](https://fred.stlouisfed.org/docs/api/fred/series_observations.html),
 [API key](https://fred.stlouisfed.org/docs/api/api_key.html).
 
-## 5. Descargas intentadas y bloqueo observado
+## 5. Primer intento: descargas fallidas (resuelto arriba)
 
 Se solicitaron `SP500`, `VIXCLS` y `DTWEXBGS` al endpoint CSV de FRED, acotando
 `cosd=2019-11-01&coed=2023-12-31`. Noviembre–diciembre de 2019 se reservarían
@@ -167,7 +253,7 @@ retroactivas, viernes–lunes/festivo, cambios DST USA/Europa, early close, dato
 ausente/expirado, lotes semanales y límites train/evaluación. Medir cobertura
 sobre las filas congeladas de it.13, sin entrenar ni eliminar barras por outcomes futuros.
 
-## 7. Siguiente paso concreto
+## 7. Siguiente paso planteado inicialmente (actualizado arriba)
 
 Resolver el acceso a raw acotados y verificar vintages/publicación de S&P 500
 y VIX. Después, medir cobertura y decidir si existe soporte temporal suficiente
