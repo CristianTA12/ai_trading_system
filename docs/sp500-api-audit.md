@@ -1,6 +1,9 @@
 # S&P 500: snapshot disponible, vintages no disponibles en ALFRED
 
 Fecha: 2026-10-06. Continuación de la [auditoría macro](macro-data-audit.md).
+Decisión posterior del usuario: aceptados los dos supuestos para preparar
+una prueba exploratoria. El [preregistro it.15](iteration-15-protocol.md)
+concreta esa excepción; no modifica los hallazgos de esta auditoría.
 
 **La API oficial rechaza las solicitudes históricas porque SP500 no existe
 en ALFRED.** La misma clave y endpoint sí devuelven el snapshot actual acotado
@@ -50,7 +53,7 @@ Ninguna de estas extracciones está aprobada para it.15. El requisito E1 del
 disponibilidad real. Sustituir esa evidencia por un supuesto es una decisión
 de diseño que debe quedar explícita, no una corrección técnica del auditor.
 
-## Alternativa concreta para decidir, todavía no preregistrada
+## Alternativa presentada y posteriormente aceptada
 
 Una prueba exploratoria **solo SP500** podría usar el snapshot actual bajo dos
 hipótesis: valores históricos representativos de los conocidos entonces y

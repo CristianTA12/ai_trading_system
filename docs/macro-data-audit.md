@@ -13,7 +13,11 @@ y las doce fechas anómalas. VIX queda no aprobado con este protocolo; el
 [contraste S&P 500 por API](sp500-api-audit.md) también terminó: el servidor
 rechaza las vintages porque SP500 no existe en ALFRED; el snapshot actual sí
 funciona. Antes de it.15 queda decidir entre evidencia temporal de otra fuente
-y un experimento expresamente condicionado a supuestos.
+y un experimento expresamente condicionado a supuestos. **Decisión posterior
+del usuario: preparar SP500 bajo los supuestos de snapshot representativo y
+disponibilidad +48 h.** El [preregistro it.15](iteration-15-protocol.md) fija
+la excepción exploratoria; cobertura condicional 100% en todos los folds,
+sin convertirla en prueba temporal ni abrir el test.
 
 La referencia experimental sigue siendo it.13: 4h, clases ±100 pb, holding 4h,
 gate SMA50>SMA200. It.14 no reemplaza esa referencia. Esta auditoría no entrena,
