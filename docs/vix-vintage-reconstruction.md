@@ -1,6 +1,9 @@
 # Reconstrucción diaria de VIX — auditoría temporal no aprobada para entrenamiento
 
 Fecha: 2026-10-06. Continuación de la [auditoría macro](macro-data-audit.md).
+**Actualización posterior:** la clave ya está configurada y la API oficial
+[reproduce las 30 anomalías](vix-api-crosscheck.md) en 37 vintages consultadas.
+La falta de credenciales quedó resuelta; la fuente sigue sin aprobación.
 **Se recibieron los 1.522 snapshots diarios solicitados; 30 contienen fechas
 de observación futuras respecto a su vintage y se excluyen íntegramente.**
 La cobertura restante de evaluación 2023 H1 es **93,34%** bajo las convenciones
@@ -134,9 +137,7 @@ acotadas a 2019–2023. Empezar por el 13-01-2023 y el caso de incorporación
 tardía de abril de 2021; no repetir toda la captura sin resolver esos casos.
 [Documentación API](https://fred.stlouisfed.org/docs/api/fred/series_observations.html).
 
-Esta API requiere una clave registrada. Se comprobó únicamente su presencia:
-**no hay `FRED_API_KEY` configurada** en el entorno WSL o `.env` del proyecto.
-Se ha solicitado configurarla localmente, sin compartirla en el chat. No se
-ha creado una cuenta, contactado al proveedor ni enviado datos del proyecto.
-Si la API confirma las anomalías, habrá que investigar su significado con
-otra evidencia temporal o replantear la fuente; no ocultarlas con un lag.
+En el cierre inicial faltaba configurar `FRED_API_KEY`. El usuario la añadió
+localmente y se completó el [contraste oficial](vix-api-crosscheck.md): las
+30 anomalías se reproducen. Falta investigar su significado con otra evidencia
+temporal o replantear la fuente; no ocultarlas con un lag.

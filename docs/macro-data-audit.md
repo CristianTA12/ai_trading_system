@@ -5,8 +5,9 @@ Fecha: 2026-10-06. Fase E, posterior al rechazo de it.14.
 30 excluidos por observaciones posteriores a su vintage y cobertura condicional
 2023 H1 del 93,34%. Ninguna fuente está aprobada para entrenar it.15.**
 El [informe de reconstrucción VIX](vix-vintage-reconstruction.md) recoge la
-verificación independiente y sustituye el siguiente paso de extracción diaria
-por el contraste de anomalías con la API oficial.
+verificación independiente. El [contraste con la API oficial](vix-api-crosscheck.md)
+ya terminó: 37 vintages consultadas, las 30 anomalías reproducidas y ninguna
+diferencia numérica con el gráfico. La credencial funciona; el bloqueo es temporal.
 
 La referencia experimental sigue siendo it.13: 4h, clases ±100 pb, holding 4h,
 gate SMA50>SMA200. It.14 no reemplaza esa referencia. Esta auditoría no entrena,
@@ -70,10 +71,10 @@ ninguna fuente del mundo las tenga ni que la serie sea necesariamente revisada.
 
 ### Decisión actual y trabajo restante
 
-- **Contrastar las anomalías VIX con la API oficial.** La extracción diaria
-  pública 2019–2023 ya terminó. Treinta snapshots contienen fechas futuras y
-  quedan excluidos íntegramente. Falta aclarar estos casos antes de aprobar
-  la fuente; el contraste por API requiere configurar `FRED_API_KEY` localmente.
+- **Aclarar las anomalías VIX con evidencia de la fuente primaria.** La API
+  oficial ya reproduce los 30 casos; siguen excluidos íntegramente. Contrastar
+  calendario y valores con Cboe antes de reconsiderar esta fuente. La clave
+  `FRED_API_KEY` está configurada y validada; no falta repetir la descarga completa.
 - **S&P 500 pendiente de otra evidencia temporal o de un supuesto explícito.**
   El raw ya existe; el problema restante es histórico/temporal, no conectividad.
 - **Mantener DTWEXBGS fuera de la primera propuesta.** La revisión cuantificada
