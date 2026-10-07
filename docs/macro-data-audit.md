@@ -1,5 +1,10 @@
 # Auditoría macro — fuentes, disponibilidad y revisiones
 
+**Cierre 2026-10-07:** la excepción exploratoria SP500 aceptada por el usuario
+se ejecutó en [it.15](iteration-15-results.md): candidato 1/5, control 2/5,
+rechazo por consistencia. Mejora económica condicional sin promoción.
+Siguiente etapa: revisión de arquitectura de Fase F; test reservado intacto.
+
 Fecha: 2026-10-06. Fase E, posterior al rechazo de it.14.
 **Actualización: reconstrucción diaria VIX terminada y auditada: 1.522 snapshots,
 30 excluidos por observaciones posteriores a su vintage y cobertura condicional
