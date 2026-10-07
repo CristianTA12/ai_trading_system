@@ -4,6 +4,9 @@
 se ejecutó en [it.15](iteration-15-results.md): candidato 1/5, control 2/5,
 rechazo por consistencia. Mejora económica condicional sin promoción.
 Siguiente etapa: revisión de arquitectura de Fase F; test reservado intacto.
+La [revisión posterior](architecture-review-post-15.md) ya está documentada:
+propone aislar la persistencia de posición con los modelos it.15 congelados.
+La propuesta no cambia las conclusiones temporales de esta auditoría.
 
 Fecha: 2026-10-06. Fase E, posterior al rechazo de it.14.
 **Actualización: reconstrucción diaria VIX terminada y auditada: 1.522 snapshots,
