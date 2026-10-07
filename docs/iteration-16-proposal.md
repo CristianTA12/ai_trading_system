@@ -1,5 +1,9 @@
 # Propuesta it.16 — Salida por DOWN sobre modelos SP500 4h congelados
 
+Estado posterior: convertida en [preregistro operativo](iteration-16-protocol.md)
+en `7d4d106` y [evaluada](iteration-16-results.md): rechazo 2/5 semillas.
+El texto siguiente conserva la propuesta anterior a la ejecución.
+
 Fecha: 2026-10-07. **Propuesta concreta pendiente de preregistro operativo;
 no hay resultados ni política alternativa implementada.** Motivación y límites
 en la [revisión de arquitectura](architecture-review-post-15.md).

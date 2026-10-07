@@ -1,5 +1,10 @@
 # Auditoría macro — fuentes, disponibilidad y revisiones
 
+**Estado posterior a it.16 (2026-10-07):** salida por DOWN rechazada 2/5.
+Se cierra la prueba de persistencia; pendiente decisión de arquitectura.
+[Resultados it.16](iteration-16-results.md). Los supuestos y las limitaciones
+temporales de las fuentes no han cambiado.
+
 **Cierre 2026-10-07:** la excepción exploratoria SP500 aceptada por el usuario
 se ejecutó en [it.15](iteration-15-results.md): candidato 1/5, control 2/5,
 rechazo por consistencia. Mejora económica condicional sin promoción.

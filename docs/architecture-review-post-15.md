@@ -1,5 +1,11 @@
 # Revisión de arquitectura — Fase F, después de it.15
 
+**Actualización posterior:** la prueba propuesta se preregistró y ejecutó
+como [it.16](iteration-16-results.md). Rechazo 2/5 frente a 1/5 del control;
+H1 sigue fallando y aparece DD concatenado de 17,03% en una semilla.
+Se cierra la prueba sin barrer variantes. El resto conserva el razonamiento
+previo a conocer esos resultados.
+
 Fecha: 2026-10-07. Alcance: revisión del diseño y diagnóstico de artifacts
 existentes. **Cero modelos entrenados y cero backtests nuevos en esta revisión.**
 It.13, it.14 e it.15 siguen rechazadas. No se abre el test 2025–2026, paper ni live.
