@@ -59,3 +59,23 @@ def gated_targets(
     allowed = gate.reindex(predictions.index, fill_value=False).astype(bool)
     entries = position_targets(predictions.loc[allowed], 0.5).astype(bool)
     return stateful_targets(index, entries, ~entries, minimum_hold_minutes=minimum_hold_minutes)
+
+
+def gated_down_exit_targets(
+    index: pd.DatetimeIndex,
+    predictions: pd.DataFrame,
+    gate: pd.Series,
+    minimum_hold_minutes: int = 240,
+) -> pd.Series:
+    """Same UP entry and forced cash rules; after minimum hold, exit on DOWN only."""
+    validate_index(gate.index)
+    if not gate.isin([True, False]).all():
+        raise ValueError("El filtro debe ser booleano, sin NaN")
+    allowed = gate.reindex(predictions.index, fill_value=False).astype(bool)
+    eligible = predictions.loc[allowed]
+    entries = position_targets(eligible, 0.5).astype(bool)
+    exits = pd.Series(
+        eligible[["p_down", "p_neutral", "p_up"]].to_numpy().argmax(axis=1) == 0,
+        index=eligible.index,
+    )
+    return stateful_targets(index, entries, exits, minimum_hold_minutes=minimum_hold_minutes)
