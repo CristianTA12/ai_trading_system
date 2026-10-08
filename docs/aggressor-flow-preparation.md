@@ -1,5 +1,9 @@
 # Preparación de flujo agresor: contrato y dataset separado
 
+**Estado posterior (2026-10-09):** la comparación se ejecutó como
+[iteración 17](iteration-17-results.md): rechazo 1/5 frente a 2/5 del control.
+La preparación sigue siendo válida; no demuestra ventaja predictiva.
+
 Fecha: 2026-10-08. Continúa la [auditoría](aggressor-flow-audit.md).
 Esta preparación no entrena ni evalúa rentabilidad. No cambia las 20 features
 v1, el snapshot original, los modelos ni `risk-return-v1`.

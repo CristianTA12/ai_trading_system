@@ -160,7 +160,19 @@ def verify(output):
         verdict = verdict_to_dict(evaluate_all(inputs[arm]))
         assert verdict == json.loads((output / f"{arm}_verdict.json").read_text())
         decisions[arm] = {"passes": verdict["passes"], "seeds_passing": verdict["seeds_passing"]}
-    assert reads == 128 and missing == 150
+    # Derive the count from independently reconstructed labels on eligible
+    # prediction indices. Flow gaps can remove rows also lacking outcomes;
+    # the old iteration-13 total is not a valid invariant for a paired subset.
+    expected_missing = len(SEEDS) * sum(
+        int(
+            calculated_labels.target_return.reindex(windows[fold][arm].validation_features.index)
+            .isna()
+            .sum()
+        )
+        for fold in FOLDS
+        for arm in inputs
+    )
+    assert reads == 128 and missing == expected_missing
     return {
         "verified": True,
         "conditional_research": True,

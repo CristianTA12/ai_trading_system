@@ -1,5 +1,9 @@
 # Auditoría de flujo agresor — recuperar datos ya disponibles
 
+**Seguimiento (2026-10-09):** dataset [preparado](aggressor-flow-preparation.md)
+y [it.17 rechazada](iteration-17-results.md), 1/5 frente a 2/5 del control.
+La viabilidad de los datos no se tradujo en mejora estable con este paquete.
+
 Fecha: 2026-10-08. **Viable para preparar un dataset de flujo por minuto;
 no se ha demostrado señal predictiva.** Cero modelos y cero backtests.
 No se consultan observaciones de 2024 ni del test 2025–2026.
