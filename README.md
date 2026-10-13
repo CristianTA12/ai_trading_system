@@ -8,8 +8,10 @@ Ninguna receta está promovida. La [iteración 17](docs/iteration-17-results.md)
 se cerró con rechazo (1/5 semillas frente a 2/5 del control).
 La [revisión de arquitectura](docs/architecture-review-post-17.md) cierra
 esta familia incremental y define como siguiente trabajo técnico la
-[captura prospectiva de calidad](docs/prospective-data-plan.md), todavía
-sin implementar. Test reservado cerrado; sin paper ni trading real.
+[captura prospectiva de calidad](docs/prospective-data-plan.md).
+El [piloto de diez minutos](docs/prospective-pilot-results.md) está implementado,
+verificado y detenido; queda resolver la sincronización del reloj.
+Test reservado cerrado; sin paper ni trading real.
 
 ## Objetivo
 

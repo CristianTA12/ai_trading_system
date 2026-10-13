@@ -3,6 +3,9 @@
 Fecha: 2026-10-13. Revisión de resultados existentes: cero modelos nuevos,
 cero backtests nuevos y ningún acceso al test reservado.
 
+Seguimiento posterior del mismo día: [collector y piloto completados](prospective-pilot-results.md).
+La captura está detenida. Esta revisión conserva el diagnóstico anterior a su implementación.
+
 ## Decisión de trabajo
 
 Cerrar la exploración incremental de la receta BTC spot long-only,

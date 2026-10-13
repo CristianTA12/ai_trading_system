@@ -5,6 +5,7 @@ import json
 import pytest
 
 from src.data.collectors.prospective import Journal, capture, closed_asof, parse_kline, summarize
+from src.data.collectors.verify_prospective import verify
 
 START = 1609459200000
 
@@ -136,6 +137,11 @@ async def test_duration_stops_socket_and_writes_integrity_manifest(tmp_path):
     assert report["stop_reason"] == "duration_limit"
     assert report["messages"] == 1 and connection.closed
     assert sum(p.stat().st_size for p in folder.iterdir()) <= 50_000_000
+    assert verify(folder)["verified"]
+    path = next(folder.glob("messages-*.jsonl"))
+    path.write_bytes(path.read_bytes() + b" ")
+    with pytest.raises(AssertionError):
+        verify(folder)
 
 
 async def test_failed_connection_has_bounded_attempts(tmp_path):
