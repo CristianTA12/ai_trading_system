@@ -12,7 +12,7 @@ license = {text = "MIT"}
 dependencies = [
     # === Data Ingestion ===
     "ccxt>=4.0",                    # Exchange API unificada
-    "websockets>=12.0",             # WebSocket client
+    "websockets>=15.0",             # asyncio client used by bounded public collector
     "aiohttp>=3.9",                 # HTTP async
     "feedparser>=6.0",              # RSS parser
     "praw>=7.7",                    # Reddit API
