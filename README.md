@@ -2,6 +2,15 @@
 
 Sistema de trading cuantitativo multimodelo con IA.
 
+## Estado de investigación — 2026-10-13
+
+Ninguna receta está promovida. La [iteración 17](docs/iteration-17-results.md)
+se cerró con rechazo (1/5 semillas frente a 2/5 del control).
+La [revisión de arquitectura](docs/architecture-review-post-17.md) cierra
+esta familia incremental y define como siguiente trabajo técnico la
+[captura prospectiva de calidad](docs/prospective-data-plan.md), todavía
+sin implementar. Test reservado cerrado; sin paper ni trading real.
+
 ## Objetivo
 
 Plataforma para recoger datos de mercado, generar features, entrenar modelos de IA,

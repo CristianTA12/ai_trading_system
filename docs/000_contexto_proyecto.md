@@ -1,5 +1,11 @@
 # Contexto del Proyecto — AI Trading System
 
+> **Lectura histórica:** el cuerpo describe el estado de septiembre de 2026
+> y no es la situación operativa actual. A 2026-10-13, consultar la
+> [revisión post-it.17](architecture-review-post-17.md) y el
+> [cierre de it.17](iteration-17-results.md). Ninguna receta promovida;
+> siguiente etapa técnica propuesta: captura prospectiva de calidad.
+
 **Última actualización**: 2026-09-29 (post-auditoría derivados)
 **Repositorio**: `d:\ai_trading_system` · rama `develop`
 **Tests**: 135 pasando, 2 de integración omitidos (requieren DB)
