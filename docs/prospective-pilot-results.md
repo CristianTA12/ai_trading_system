@@ -1,5 +1,7 @@
 # Piloto prospectivo de calidad — 2026-10-13
 
+Seguimiento 2026-10-14: [diagnóstico del reloj y corrección pendiente](prospective-clock-check.md).
+
 **Completado, verificado y detenido.** Valida captura y reconstrucción por
 recepción local; no constituye un resultado de estrategia ni una iteración 18.
 
