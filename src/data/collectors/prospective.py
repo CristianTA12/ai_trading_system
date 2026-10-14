@@ -16,7 +16,7 @@ import websockets
 from websockets.asyncio.client import connect
 
 URL = "wss://data-stream.binance.vision/ws/btcusdt@kline_1m"
-VERSION = "1"
+VERSION = "2"
 MINUTE_MS = 60_000
 
 
@@ -174,11 +174,11 @@ def summarize(folder, started_ns, ended_ns):
 
 async def capture(folder, seconds=600, max_bytes=50_000_000, max_attempts=3, connector=connect):
     if (
-        not 0 < seconds <= 600
+        not 0 < seconds <= 7500
         or not 1_000_000 <= max_bytes <= 50_000_000
         or not 1 <= max_attempts <= 3
     ):
-        raise ValueError("Pilot limits: <=600 seconds, 1–50 MB, 1–3 attempts")
+        raise ValueError("Capture limits: <=7500 seconds, 1–50 MB, 1–3 attempts")
     folder.mkdir(parents=True, exist_ok=False)
     session = str(uuid.uuid4())
     started_ns, started_mono = time.time_ns(), time.monotonic_ns()

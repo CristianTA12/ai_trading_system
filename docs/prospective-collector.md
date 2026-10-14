@@ -12,7 +12,8 @@ Desde la raíz, usando Python con `websockets>=15`:
 python -m src.data.collectors.prospective --output data/prospective/nueva-sesion --seconds 600 --max-bytes 50000000
 ```
 
-El directorio debe ser nuevo. Máximo 600 segundos de ventana de captura,
+El directorio debe ser nuevo. Por defecto 600 segundos de ventana de captura;
+desde la versión 2 admite hasta 7.500 segundos para el [piloto horario](prospective-hour-pilot.md),
 50.000.000 bytes totales y tres intentos de conexión. Reserva espacio para
 eventos y cierre; un mensaje que no cabe se omite explícitamente en el log
 y detiene la sesión. El cierre del socket puede requerir unos segundos
