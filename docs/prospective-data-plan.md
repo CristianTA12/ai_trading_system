@@ -3,7 +3,8 @@
 Fecha: 2026-10-13. **Actualización: collector implementado y piloto acotado
 completado, verificado y detenido.** Véanse los [resultados](prospective-pilot-results.md)
 y el [manual](prospective-collector.md). El resto conserva el diseño de partida;
-el agregador prospectivo 15m/1h sigue pendiente.
+el [agregador prospectivo 15m/1h](prospective-aggregation.md) se implementó
+posteriormente el 2026-10-14.
 Deriva de la [revisión post-it.17](architecture-review-post-17.md).
 No es un protocolo de rentabilidad ni una iteración 18.
 

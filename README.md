@@ -10,9 +10,9 @@ La [revisión de arquitectura](docs/architecture-review-post-17.md) cierra
 esta familia incremental y define como siguiente trabajo técnico la
 [captura prospectiva de calidad](docs/prospective-data-plan.md).
 El [piloto de diez minutos](docs/prospective-pilot-results.md) está implementado,
-verificado y detenido; queda resolver la sincronización del reloj.
-El [diagnóstico del reloj](docs/prospective-clock-check.md) identifica el paso
-pendiente que requiere una consola de Windows como administrador.
+verificado y detenido. La [agregación causal 15m/1h](docs/prospective-aggregation.md)
+está implementada y probada; la incertidumbre del reloj se conserva como
+limitación de precisión temporal, sin bloquear este desarrollo.
 Test reservado cerrado; sin paper ni trading real.
 
 ## Objetivo

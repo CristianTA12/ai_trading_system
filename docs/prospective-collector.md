@@ -48,7 +48,8 @@ Mensajes inválidos y binarios siguen conservándose, aunque no alimenten el rep
 `closed_asof(records, decision_ns)` conserva la última versión cerrada recibida
 **estrictamente antes** de la decisión, por minuto. Un cierre tardío o una
 revisión no modifica lo conocido en decisiones anteriores. Esta versión
-expone cierres por minuto: no implementa todavía el agregador prospectivo 15m/1h.
+expone cierres por minuto. La [agregación 15m/1h](prospective-aggregation.md)
+se implementa en un módulo derivado separado.
 
 La cobertura compara los minutos completos dentro de la ventana del reloj
 local con cierres disponibles al final. No confundirla con tiempo de conexión

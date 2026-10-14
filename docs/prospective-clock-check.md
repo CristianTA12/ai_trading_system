@@ -48,9 +48,11 @@ Referencia: [herramientas y configuración del servicio de hora de Microsoft](ht
 
 ## Continuación del proyecto
 
-No iniciar aún la campaña prolongada. Tras resolver el reloj, conservar su
-estado antes y después de una nueva captura acotada, junto a las mediciones
-de desfase; reportar los límites de precisión observados. No corregir los
-timestamps raw del piloto anterior ni reinterpretar sus diferencias de tiempo
-como latencia de red. La agregación causal 15m/1h puede desarrollarse con
-pruebas sintéticas mientras se resuelve esta dependencia del equipo.
+Corrección de alcance: el estado del servicio no implica que la hora mostrada
+sea incorrecta. La incertidumbre de unos cientos de milisegundos no bloquea
+la captura ni la agregación de 15m/1h; limita las afirmaciones de precisión
+temporal y latencia absoluta. No es necesario modificar el reloj para continuar
+este desarrollo. Conservar su estado y las mediciones de desfase en futuras
+sesiones. No corregir timestamps raw ni reinterpretar diferencias de relojes
+como latencia de red. Una campaña prolongada requiere definir por separado
+duración, almacenamiento y supervisión.
