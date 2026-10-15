@@ -15,6 +15,8 @@ está implementada y probada; la incertidumbre del reloj se conserva como
 limitación de precisión temporal, sin bloquear este desarrollo.
 El [piloto horario real](docs/prospective-hour-pilot-results.md) completó una hora
 y pasó la revisión de integridad y agregación. La captura está detenida.
+La continuidad prevista es por [sesiones manuales](docs/prospective-manual-sessions.md)
+mientras el PC esté en uso, con parada limpia y huecos explícitos.
 Test reservado cerrado; sin paper ni trading real.
 
 ## Objetivo

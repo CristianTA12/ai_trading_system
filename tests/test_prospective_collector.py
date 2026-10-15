@@ -172,3 +172,30 @@ async def test_cancel_closes_socket_and_keeps_manifest(tmp_path):
     await task
     assert validate_manifest(folder)["stop_reason"] == "cancelled"
     assert connection.closed
+
+
+async def test_stop_marker_closes_socket_and_preserves_verifiable_capture(tmp_path):
+    marker = tmp_path / "session.stop"
+
+    class StopConnection(FakeConnection):
+        async def recv(self):
+            marker.touch()
+            return payload()
+
+    connection = StopConnection()
+    folder = tmp_path / "capture"
+    await capture(folder, seconds=2, stop_file=marker, connector=lambda *a, **k: connection)
+    assert connection.closed
+    assert verify(folder)["stop_reason"] == "user_stop"
+    assert validate_manifest(folder)["messages"] == 1
+
+
+async def test_stop_marker_must_be_new_and_outside_capture(tmp_path):
+    folder = tmp_path / "capture"
+    with pytest.raises(ValueError, match="outside"):
+        await capture(folder, stop_file=folder / "stop")
+    marker = tmp_path / "existing.stop"
+    marker.touch()
+    with pytest.raises(ValueError, match="already exists"):
+        await capture(folder, stop_file=marker)
+    assert not folder.exists()

@@ -2,6 +2,7 @@
 
 Fecha: 2026-10-13. Implementación del [plan](prospective-data-plan.md).
 Solo datos públicos BTCUSDT spot `kline_1m`; sin claves, órdenes ni modelos.
+Para un PC de uso intermitente, seguir [sesiones manuales y parada limpia](prospective-manual-sessions.md).
 El [piloto real del 13 de octubre](prospective-pilot-results.md) terminó y está verificado.
 
 ## Ejecutar y detener

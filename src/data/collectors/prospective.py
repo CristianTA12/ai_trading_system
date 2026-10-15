@@ -16,7 +16,7 @@ import websockets
 from websockets.asyncio.client import connect
 
 URL = "wss://data-stream.binance.vision/ws/btcusdt@kline_1m"
-VERSION = "2"
+VERSION = "3"
 MINUTE_MS = 60_000
 
 
@@ -172,13 +172,21 @@ def summarize(folder, started_ns, ended_ns):
     }
 
 
-async def capture(folder, seconds=600, max_bytes=50_000_000, max_attempts=3, connector=connect):
+async def capture(
+    folder, seconds=600, max_bytes=50_000_000, max_attempts=3, connector=connect, stop_file=None
+):
     if (
         not 0 < seconds <= 7500
         or not 1_000_000 <= max_bytes <= 50_000_000
         or not 1 <= max_attempts <= 3
     ):
         raise ValueError("Capture limits: <=7500 seconds, 1–50 MB, 1–3 attempts")
+    if stop_file is not None:
+        stop_file = Path(stop_file).resolve()
+        if stop_file.is_relative_to(folder.resolve()):
+            raise ValueError("Stop file must be outside the immutable capture folder")
+        if stop_file.exists():
+            raise ValueError("Stop file already exists; choose a new session marker")
     folder.mkdir(parents=True, exist_ok=False)
     session = str(uuid.uuid4())
     started_ns, started_mono = time.time_ns(), time.monotonic_ns()
@@ -220,6 +228,7 @@ async def capture(folder, seconds=600, max_bytes=50_000_000, max_attempts=3, con
         "websockets": websockets.__version__,
         "clock_synchronization": "unknown",
         "purpose": "data_quality_not_strategy_test",
+        "stop_file": str(stop_file) if stop_file else None,
     }
     if platform.system() == "Windows":
         try:
@@ -237,6 +246,9 @@ async def capture(folder, seconds=600, max_bytes=50_000_000, max_attempts=3, con
     log("session_started")
     try:
         while asyncio.get_running_loop().time() < deadline and attempts < max_attempts:
+            if stop_file is not None and stop_file.exists():
+                reason = "user_stop"
+                break
             attempts += 1
             log("connecting", attempt=attempts)
             try:
@@ -253,6 +265,9 @@ async def capture(folder, seconds=600, max_bytes=50_000_000, max_attempts=3, con
                         log("connected", attempt=attempts)
                         try:
                             while True:
+                                if stop_file is not None and stop_file.exists():
+                                    reason = "user_stop"
+                                    return
                                 raw = await asyncio.wait_for(ws.recv(), timeout=15)
                                 received_ns, monotonic_ns = time.time_ns(), time.monotonic_ns()
                                 record = {
@@ -283,11 +298,18 @@ async def capture(folder, seconds=600, max_bytes=50_000_000, max_attempts=3, con
                 log("connection_or_receive_timeout", attempt=attempts)
             except (OSError, websockets.exceptions.WebSocketException) as exc:
                 log("connection_error", attempt=attempts, exception_type=type(exc).__name__)
+            if stop_file is not None and stop_file.exists():
+                reason = "user_stop"
+                break
             if attempts < max_attempts:
                 await asyncio.sleep(
                     min(2**attempts, max(0, deadline - asyncio.get_running_loop().time()))
                 )
-        if attempts >= max_attempts and asyncio.get_running_loop().time() < deadline:
+        if (
+            reason != "user_stop"
+            and attempts >= max_attempts
+            and asyncio.get_running_loop().time() < deadline
+        ):
             reason = "attempt_limit"
     except asyncio.CancelledError:
         reason = "cancelled"
@@ -327,8 +349,9 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--seconds", type=float, default=600)
     parser.add_argument("--max-bytes", type=int, default=50_000_000)
+    parser.add_argument("--stop-file", type=Path)
     args = parser.parse_args()
-    asyncio.run(capture(args.output, args.seconds, args.max_bytes))
+    asyncio.run(capture(args.output, args.seconds, args.max_bytes, stop_file=args.stop_file))
     report = json.loads((args.output / "report.json").read_text())
     if report["messages"] == 0 or report["stop_reason"] in {"attempt_limit", "unexpected_error"}:
         raise SystemExit(2)
