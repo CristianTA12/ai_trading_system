@@ -1,5 +1,8 @@
 # Validación en vivo de una hora completa — 2026-10-14
 
+Seguimiento: [primer intento interrumpido y recuperación parcial](prospective-hour-pilot-interruption.md),
+revisado el 2026-10-15. No completó la hora objetivo.
+
 El runner `src.data.collectors.hour_pilot` captura desde su arranque hasta
 30 segundos después del final de la siguiente hora UTC completa. La duración
 planificada es entre 3.630 y 7.230 segundos. El collector v2 admite un máximo
