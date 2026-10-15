@@ -2,6 +2,8 @@
 
 Seguimiento: [primer intento interrumpido y recuperación parcial](prospective-hour-pilot-interruption.md),
 revisado el 2026-10-15. No completó la hora objetivo.
+El [segundo intento completó la hora](prospective-hour-pilot-results.md),
+con verificación adicional el 2026-10-16.
 
 El runner `src.data.collectors.hour_pilot` captura desde su arranque hasta
 30 segundos después del final de la siguiente hora UTC completa. La duración

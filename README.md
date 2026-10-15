@@ -13,6 +13,8 @@ El [piloto de diez minutos](docs/prospective-pilot-results.md) está implementad
 verificado y detenido. La [agregación causal 15m/1h](docs/prospective-aggregation.md)
 está implementada y probada; la incertidumbre del reloj se conserva como
 limitación de precisión temporal, sin bloquear este desarrollo.
+El [piloto horario real](docs/prospective-hour-pilot-results.md) completó una hora
+y pasó la revisión de integridad y agregación. La captura está detenida.
 Test reservado cerrado; sin paper ni trading real.
 
 ## Objetivo
