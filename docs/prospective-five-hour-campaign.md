@@ -1,5 +1,7 @@
 # Campaña acotada de cinco horas — 2026-10-16
 
+Estado: [completada y verificada](prospective-five-hour-campaign-results.md).
+
 Autorizada para este PC durante su disponibilidad de más de cinco horas.
 Runner: `python -m src.data.collectors.campaign --output CARPETA_NUEVA`.
 Presupuesto monotónico global de 18.000 segundos; máximo tres sesiones,

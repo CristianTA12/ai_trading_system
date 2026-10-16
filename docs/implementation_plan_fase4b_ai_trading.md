@@ -1,5 +1,41 @@
 # Implementation Plan — Cierre de Fase 4A y apertura de Fase 4B
 
+> **Actualización de estado — 2026-10-16:** el contenido original de este plan
+> describe el punto de partida tras it.13, no el estado actual. Las iteraciones
+> 14–17 ya están cerradas; ninguna receta está promovida. La
+> [revisión post-it.17](architecture-review-post-17.md) cierra la familia
+> incremental y exige una hipótesis económica distinta antes de nuevos modelos.
+> La captura y agregación prospectiva ya están implementadas, con piloto horario
+> validado y [campaña de cinco horas](prospective-five-hour-campaign-results.md).
+> No corresponde repetir experimentos aquí descritos como pendientes ni ampliar
+> capturas por inercia. El siguiente hito es la ficha de reapertura descrita abajo.
+
+## Siguiente hito vigente: justificar la reapertura predictiva
+
+La infraestructura de captura resuelve trazabilidad de recepción; no demuestra
+información predictiva nueva respecto a las klines históricas ya probadas.
+Acumular otras cuatro horas no resuelve por sí solo el bloqueo de consistencia.
+Las capturas realizadas son diagnóstico de calidad, no un test de rendimiento.
+
+Antes de preregistrar una it.18, preparar una única ficha con:
+
+1. Mecanismo económico y evidencia externa que no proceda de seleccionar
+   resultados favorables en los folds usados.
+2. Información nueva necesaria, cobertura y disponibilidad temporal verificable.
+3. Baseline sencillo sin ML y aportación concreta que debe justificar el modelo.
+4. Instrumento, ejecución y costes compatibles con el mandato vigente.
+5. Protocolo congelado, condiciones para descartar la hipótesis y separación
+   entre desarrollo y evaluación futura.
+
+La primera decisión es si esa ficha justifica siquiera un experimento; no se
+presupone que tenga que aprobarse. Se mantiene risk-return-v1 y el test reservado
+cerrado. No se introducen shorts, leverage, otro benchmark ni un cambio de
+mandato mediante una actualización técnica. No hay modelo promovido para paper.
+
+---
+
+## Plan original conservado como antecedente
+
 **Proyecto:** `ai-trading-system`
 **Fecha:** 2026-10-05 (revisado tras iteraciones 11–13)
 **Objetivo:** cerrar de forma reproducible la exploración con XGBoost + features técnicas v1, diagnosticar el bloqueo de consistencia de la receta 4h + gate, y abrir una nueva etapa centrada en resolver ese bloqueo y, si es necesario, incorporar información de mercado nueva.

@@ -17,6 +17,8 @@ El [piloto horario real](docs/prospective-hour-pilot-results.md) completó una h
 y pasó la revisión de integridad y agregación. La captura está detenida.
 La continuidad prevista es por [sesiones manuales](docs/prospective-manual-sessions.md)
 mientras el PC esté en uso, con parada limpia y huecos explícitos.
+La [campaña de cinco horas](docs/prospective-five-hour-campaign-results.md)
+terminó y está verificada: 8.733 mensajes, tres sesiones; hito técnico cerrado.
 Test reservado cerrado; sin paper ni trading real.
 
 ## Objetivo
