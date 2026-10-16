@@ -12,6 +12,11 @@
 
 ## Siguiente hito vigente: justificar la reapertura predictiva
 
+Ficha preparada el 2026-10-16: [atención externa a Bitcoin](research-reopening-attention.md).
+Estado: candidata a auditoría de datos, sin it.18 autorizada metodológicamente
+ni resultado económico. La incertidumbre de publicación histórica es un gate
+pendiente; no se asume resuelta con un retraso arbitrario.
+
 La infraestructura de captura resuelve trazabilidad de recepción; no demuestra
 información predictiva nueva respecto a las klines históricas ya probadas.
 Acumular otras cuatro horas no resuelve por sí solo el bloqueo de consistencia.

@@ -19,6 +19,8 @@ La continuidad prevista es por [sesiones manuales](docs/prospective-manual-sessi
 mientras el PC esté en uso, con parada limpia y huecos explícitos.
 La [campaña de cinco horas](docs/prospective-five-hour-campaign-results.md)
 terminó y está verificada: 8.733 mensajes, tres sesiones; hito técnico cerrado.
+La [ficha de reapertura](docs/research-reopening-attention.md) propone auditar
+atención externa a Bitcoin antes de decidir sobre una nueva iteración.
 Test reservado cerrado; sin paper ni trading real.
 
 ## Objetivo
