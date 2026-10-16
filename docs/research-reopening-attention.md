@@ -4,6 +4,10 @@ Fecha: 2026-10-16. **Candidata a auditoría de datos; no autoriza todavía una
 iteración 18 ni constituye un preregistro de rendimiento.** Cero entrenamientos,
 backtests, consultas de precios históricos o accesos al test reservado en esta revisión.
 
+Actualización: [auditoría ejecutada](attention-source-audit.md). La muestra tiene
+31/31 días, pero no acredita publicación histórica ni revisiones. Se archiva
+la candidata para ejecución histórica inmediata; no se abre it.18.
+
 ## Decisión
 
 Investigar si una medida externa de atención permite distinguir demanda

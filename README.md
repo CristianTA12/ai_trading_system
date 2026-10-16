@@ -2,7 +2,7 @@
 
 Sistema de trading cuantitativo multimodelo con IA.
 
-## Estado de investigación — 2026-10-13
+## Estado de investigación — 2026-10-16
 
 Ninguna receta está promovida. La [iteración 17](docs/iteration-17-results.md)
 se cerró con rechazo (1/5 semillas frente a 2/5 del control).
@@ -19,8 +19,9 @@ La continuidad prevista es por [sesiones manuales](docs/prospective-manual-sessi
 mientras el PC esté en uso, con parada limpia y huecos explícitos.
 La [campaña de cinco horas](docs/prospective-five-hour-campaign-results.md)
 terminó y está verificada: 8.733 mensajes, tres sesiones; hito técnico cerrado.
-La [ficha de reapertura](docs/research-reopening-attention.md) propone auditar
-atención externa a Bitcoin antes de decidir sobre una nueva iteración.
+La [auditoría de atención externa](docs/attention-source-audit.md) obtuvo una
+muestra completa, pero no acreditó disponibilidad histórica. Candidata archivada
+sin backtest; no hay it.18 en ejecución.
 Test reservado cerrado; sin paper ni trading real.
 
 ## Objetivo

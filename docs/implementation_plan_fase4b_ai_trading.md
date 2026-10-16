@@ -17,6 +17,11 @@ Estado: candidata a auditoría de datos, sin it.18 autorizada metodológicamente
 ni resultado económico. La incertidumbre de publicación histórica es un gate
 pendiente; no se asume resuelta con un retraso arbitrario.
 
+Resultado posterior: [auditoría de Wikimedia](attention-source-audit.md) completada;
+la muestra pasa acceso/esquema, pero no disponibilidad temporal histórica.
+La candidata queda archivada sin backtest ni entrenamiento. Sigue sin haber
+una hipótesis nueva que cumpla todos los requisitos para ejecutar it.18.
+
 La infraestructura de captura resuelve trazabilidad de recepción; no demuestra
 información predictiva nueva respecto a las klines históricas ya probadas.
 Acumular otras cuatro horas no resuelve por sí solo el bloqueo de consistencia.
