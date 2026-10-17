@@ -2,7 +2,7 @@
 
 Sistema de trading cuantitativo multimodelo con IA.
 
-## Estado de investigación — 2026-10-16
+## Estado de investigación — 2026-10-17
 
 Ninguna receta está promovida. La [iteración 17](docs/iteration-17-results.md)
 se cerró con rechazo (1/5 semillas frente a 2/5 del control).
@@ -23,6 +23,9 @@ La [auditoría de atención externa](docs/attention-source-audit.md) obtuvo una
 muestra completa, pero no acreditó disponibilidad histórica. Candidata archivada
 sin backtest; no hay it.18 en ejecución.
 Test reservado cerrado; sin paper ni trading real.
+El [diagnóstico emparejado del clasificador](docs/classifier-value-diagnostic.md)
+encuentra mejora bruta y de riesgo frente al filtro, erosionada por rotación,
+con déficit bruto adicional en 2023 H1. No hay receta nueva ni promoción.
 
 ## Objetivo
 

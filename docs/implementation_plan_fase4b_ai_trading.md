@@ -12,6 +12,13 @@
 
 ## Siguiente hito vigente: justificar la reapertura predictiva
 
+Prioridad acordada con el usuario el 2026-10-17: volver al diagnóstico de la
+estrategia antes de nuevas fuentes. [Comparación emparejada completada](classifier-value-diagnostic.md):
+el clasificador aporta selección bruta y menor DD, pero costes de rotación y
+déficit bruto de 2023 H1 impiden una receta robusta. Una posible intervención
+debe justificarse en la política de exposición con probabilidades congeladas,
+sin repetir salida DOWN ni barrer parámetros. No se abre una iteración automáticamente.
+
 Ficha preparada el 2026-10-16: [atención externa a Bitcoin](research-reopening-attention.md).
 Estado: candidata a auditoría de datos, sin it.18 autorizada metodológicamente
 ni resultado económico. La incertidumbre de publicación histórica es un gate
