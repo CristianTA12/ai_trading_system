@@ -19,6 +19,12 @@ déficit bruto de 2023 H1 impiden una receta robusta. Una posible intervención
 debe justificarse en la política de exposición con probabilidades congeladas,
 sin repetir salida DOWN ni barrer parámetros. No se abre una iteración automáticamente.
 
+Seguimiento: se preregistró y ejecutó una única intervención de cadencia,
+[it.18: decisiones cada 4h](iteration-18-results.md). Resultado 0/5 frente a
+2/5 del control; rotación −84,36%, pero menor retorno bruto/neto en 5/5.
+Se cierra esa formulación, sin barrer otras rejillas ni prolongar esta familia
+por inercia. Test reservado cerrado y ninguna receta promovida.
+
 Ficha preparada el 2026-10-16: [atención externa a Bitcoin](research-reopening-attention.md).
 Estado: candidata a auditoría de datos, sin it.18 autorizada metodológicamente
 ni resultado económico. La incertidumbre de publicación histórica es un gate

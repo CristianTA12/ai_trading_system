@@ -6,6 +6,8 @@ Sistema de trading cuantitativo multimodelo con IA.
 
 Ninguna receta está promovida. La [iteración 17](docs/iteration-17-results.md)
 se cerró con rechazo (1/5 semillas frente a 2/5 del control).
+La [iteración 18](docs/iteration-18-results.md), política de decisión cada cuatro
+horas sobre probabilidades congeladas, también se rechaza: 0/5 frente a 2/5.
 La [revisión de arquitectura](docs/architecture-review-post-17.md) cierra
 esta familia incremental y define como siguiente trabajo técnico la
 [captura prospectiva de calidad](docs/prospective-data-plan.md).
@@ -21,7 +23,7 @@ La [campaña de cinco horas](docs/prospective-five-hour-campaign-results.md)
 terminó y está verificada: 8.733 mensajes, tres sesiones; hito técnico cerrado.
 La [auditoría de atención externa](docs/attention-source-audit.md) obtuvo una
 muestra completa, pero no acreditó disponibilidad histórica. Candidata archivada
-sin backtest; no hay it.18 en ejecución.
+sin backtest; it.18 fue una prueba de política distinta, ya terminada.
 Test reservado cerrado; sin paper ni trading real.
 El [diagnóstico emparejado del clasificador](docs/classifier-value-diagnostic.md)
 encuentra mejora bruta y de riesgo frente al filtro, erosionada por rotación,
