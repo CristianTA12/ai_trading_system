@@ -2,14 +2,25 @@
 
 Sistema de trading cuantitativo multimodelo con IA.
 
-## Estado de investigación — 2026-10-17
+## Estado de investigación — 2026-10-28
+
+**Familia incremental cerrada: 19 iteraciones, cero recetas promovidas.**
+La última intervención autorizada, [histéresis it.19](docs/iteration-19-results.md),
+queda rechazada: 0/5 semillas frente a 2/5 del original y 1/5 de DOWN sin umbral.
+Reduce operaciones un 49,78%, pero DD concatenado 17,58–21,83% y consistencia
+insuficiente en 5/5. No se ajustarán parámetros para rescatar la receta.
+Solo una hipótesis económica completamente nueva o un cambio explícito de
+mandato justificarían reabrir investigación. Test reservado cerrado, sin paper
+ni trading real. [Plan vigente y antecedentes](docs/implementation_plan_fase4b_ai_trading.md).
+
+### Antecedentes técnicos cerrados
 
 Ninguna receta está promovida. La [iteración 17](docs/iteration-17-results.md)
 se cerró con rechazo (1/5 semillas frente a 2/5 del control).
 La [iteración 18](docs/iteration-18-results.md), política de decisión cada cuatro
 horas sobre probabilidades congeladas, también se rechaza: 0/5 frente a 2/5.
 La [revisión de arquitectura](docs/architecture-review-post-17.md) cierra
-esta familia incremental y define como siguiente trabajo técnico la
+esta familia incremental y propuso como siguiente trabajo técnico la
 [captura prospectiva de calidad](docs/prospective-data-plan.md).
 El [piloto de diez minutos](docs/prospective-pilot-results.md) está implementado,
 verificado y detenido. La [agregación causal 15m/1h](docs/prospective-aggregation.md)
@@ -17,7 +28,7 @@ está implementada y probada; la incertidumbre del reloj se conserva como
 limitación de precisión temporal, sin bloquear este desarrollo.
 El [piloto horario real](docs/prospective-hour-pilot-results.md) completó una hora
 y pasó la revisión de integridad y agregación. La captura está detenida.
-La continuidad prevista es por [sesiones manuales](docs/prospective-manual-sessions.md)
+La continuidad se diseñó por [sesiones manuales](docs/prospective-manual-sessions.md)
 mientras el PC esté en uso, con parada limpia y huecos explícitos.
 La [campaña de cinco horas](docs/prospective-five-hour-campaign-results.md)
 terminó y está verificada: 8.733 mensajes, tres sesiones; hito técnico cerrado.

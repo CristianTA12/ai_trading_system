@@ -1,59 +1,53 @@
 # Implementation Plan — Cierre de Fase 4A y apertura de Fase 4B
 
-> **Actualización de estado — 2026-10-16:** el contenido original de este plan
-> describe el punto de partida tras it.13, no el estado actual. Las iteraciones
-> 14–17 ya están cerradas; ninguna receta está promovida. La
-> [revisión post-it.17](architecture-review-post-17.md) cierra la familia
-> incremental y exige una hipótesis económica distinta antes de nuevos modelos.
-> La captura y agregación prospectiva ya están implementadas, con piloto horario
-> validado y [campaña de cinco horas](prospective-five-hour-campaign-results.md).
-> No corresponde repetir experimentos aquí descritos como pendientes ni ampliar
-> capturas por inercia. El siguiente hito es la ficha de reapertura descrita abajo.
+> **Estado vigente — 2026-10-28: familia incremental cerrada.**
+> 19 iteraciones, cero recetas promovidas. La última prueba autorizada por el
+> usuario, [histéresis it.19](iteration-19-results.md), se rechaza con 0/5 semillas.
+> El original reproduce 2/5 y DOWN sin umbral obtiene 1/5. Ninguno alcanza 4/5.
+> El cuerpo original posterior describe el punto de partida tras it.13;
+> no constituye una lista de tareas pendientes ni autoriza repetirlas.
 
-## Siguiente hito vigente: justificar la reapertura predictiva
+## Decisión y siguiente hito condicionado
 
-Prioridad acordada con el usuario el 2026-10-17: volver al diagnóstico de la
-estrategia antes de nuevas fuentes. [Comparación emparejada completada](classifier-value-diagnostic.md):
-el clasificador aporta selección bruta y menor DD, pero costes de rotación y
-déficit bruto de 2023 H1 impiden una receta robusta. Una posible intervención
-debe justificarse en la política de exposición con probabilidades congeladas,
-sin repetir salida DOWN ni barrer parámetros. No se abre una iteración automáticamente.
+La histéresis reduce operaciones de 697 a 350 y mejora neto en 4/5 frente al
+original, pero eleva DD concatenado a 17,58–21,83% y falla consistencia en 5/5.
+Cero entrenamientos; 188 backtests emparejados sobre probabilidades congeladas
+v1 de it.13. [Protocolo preregistrado](iteration-19-protocol.md), sin cambios
+retrospectivos de umbral, folds, semillas, costes ni `risk-return-v1`.
 
-Seguimiento: se preregistró y ejecutó una única intervención de cadencia,
-[it.18: decisiones cada 4h](iteration-18-results.md). Resultado 0/5 frente a
-2/5 del control; rotación −84,36%, pero menor retorno bruto/neto en 5/5.
-Se cierra esa formulación, sin barrer otras rejillas ni prolongar esta familia
-por inercia. Test reservado cerrado y ninguna receta promovida.
+Conforme al acuerdo, se cierra la familia. No hay otra variante de política,
+feature o arquitectura pendiente para rescatar esta receta. Test 2024 y
+2025–2026 cerrados; sin paper ni trading real. La reutilización intensiva de
+2022–2023 se reconoce como desarrollo adaptativo, no confirmación independiente.
 
-Ficha preparada el 2026-10-16: [atención externa a Bitcoin](research-reopening-attention.md).
-Estado: candidata a auditoría de datos, sin it.18 autorizada metodológicamente
-ni resultado económico. La incertidumbre de publicación histórica es un gate
-pendiente; no se asume resuelta con un retraso arbitrario.
+Una reapertura necesitaría una hipótesis económica completamente nueva o un
+cambio explícito del mandato. Antes de cualquier experimento, una única ficha:
 
-Resultado posterior: [auditoría de Wikimedia](attention-source-audit.md) completada;
-la muestra pasa acceso/esquema, pero no disponibilidad temporal histórica.
-La candidata queda archivada sin backtest ni entrenamiento. Sigue sin haber
-una hipótesis nueva que cumpla todos los requisitos para ejecutar it.18.
+1. Mecanismo económico con evidencia ajena a seleccionar resultados favorables
+   en estos folds.
+2. Información necesaria y disponibilidad temporal defendible.
+3. Baseline sencillo sin ML y aportación concreta exigida al modelo.
+4. Instrumento, ejecución y costes compatibles con el mandato autorizado.
+5. Protocolo congelado, condiciones de descarte y evaluación futura separada.
 
-La infraestructura de captura resuelve trazabilidad de recepción; no demuestra
-información predictiva nueva respecto a las klines históricas ya probadas.
-Acumular otras cuatro horas no resuelve por sí solo el bloqueo de consistencia.
-Las capturas realizadas son diagnóstico de calidad, no un test de rendimiento.
+Este cierre no inicia esa investigación ni introduce shorts, leverage, otro
+benchmark o criterio. No demuestra que cualquier estrategia sea incapaz de
+superar B&H: concluye que esta familia no cumple el objetivo establecido.
 
-Antes de preregistrar una it.18, preparar una única ficha con:
+## Antecedentes completados
 
-1. Mecanismo económico y evidencia externa que no proceda de seleccionar
-   resultados favorables en los folds usados.
-2. Información nueva necesaria, cobertura y disponibilidad temporal verificable.
-3. Baseline sencillo sin ML y aportación concreta que debe justificar el modelo.
-4. Instrumento, ejecución y costes compatibles con el mandato vigente.
-5. Protocolo congelado, condiciones para descartar la hipótesis y separación
-   entre desarrollo y evaluación futura.
-
-La primera decisión es si esa ficha justifica siquiera un experimento; no se
-presupone que tenga que aprobarse. Se mantiene risk-return-v1 y el test reservado
-cerrado. No se introducen shorts, leverage, otro benchmark ni un cambio de
-mandato mediante una actualización técnica. No hay modelo promovido para paper.
+- [Diagnóstico del clasificador](classifier-value-diagnostic.md): selección
+  bruta favorable frente al gate, penalización por rotación y déficit bruto H1.
+- [It.18: rejilla 4h](iteration-18-results.md): 0/5, menos operaciones pero menor
+  bruto/neto en 5/5. No barrer otra rejilla.
+- [It.19: histéresis](iteration-19-results.md): excepción final autorizada tras
+  revisar it.18; prueba terminada y cierre formal. No sustituir la candidata
+  por el control DOWN ni escoger la semilla favorable.
+- [Campaña prospectiva de cinco horas](prospective-five-hour-campaign-results.md):
+  integridad y agregación verificadas. Captura detenida; no ampliar por inercia.
+- [Auditoría Wikimedia](attention-source-audit.md): acceso y esquema correctos,
+  disponibilidad histórica no acreditada. Hipótesis de atención archivada sin
+  backtest ni entrenamiento; no es un experimento pendiente.
 
 ---
 

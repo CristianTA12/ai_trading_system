@@ -1,10 +1,11 @@
 # Contexto del Proyecto — AI Trading System
 
 > **Lectura histórica:** el cuerpo describe el estado de septiembre de 2026
-> y no es la situación operativa actual. A 2026-10-13, consultar la
-> [revisión post-it.17](architecture-review-post-17.md) y el
-> [cierre de it.17](iteration-17-results.md). Ninguna receta promovida;
-> siguiente etapa técnica propuesta: captura prospectiva de calidad.
+> y no es la situación operativa actual. A 2026-10-28, consultar el
+> [cierre de it.19](iteration-19-results.md) y el
+> [plan vigente](implementation_plan_fase4b_ai_trading.md).
+> Familia incremental cerrada: 19 iteraciones, cero recetas promovidas.
+> Captura de calidad completada; no hay experimento ni trading pendiente.
 
 **Última actualización**: 2026-09-29 (post-auditoría derivados)
 **Repositorio**: `d:\ai_trading_system` · rama `develop`
