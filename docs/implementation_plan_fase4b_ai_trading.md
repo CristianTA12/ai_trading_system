@@ -9,7 +9,13 @@
 
 ## Decisión y siguiente hito condicionado
 
-Última revisión: [alcance y propuesta de carry](research-scope-post-19.md).
+Resultado más reciente: [auditoría de carry](carry-data-audit.md), autorizada
+la investigación de derivados cubiertos. Cuatro series con 96/96 barras y
+checksums válidos; margen/costes históricos, liquidación y ejecución sin acreditar.
+No apto para backtest inmediato. No construir motor ni descargar años de datos;
+solo reconsiderar al resolver las evidencias concretas enumeradas en el informe.
+
+Antecedente: [alcance y propuesta de carry](research-scope-post-19.md).
 Se recomienda estudiar la viabilidad de spot + futuro con vencimiento cubierto;
 es un mecanismo distinto, pero requiere ampliar el alcance spot-only. No hay
 viabilidad de datos confirmada, simulador ni cambio efectivo de mandato.

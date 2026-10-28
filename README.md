@@ -21,6 +21,10 @@ La [revisión de alcance](docs/research-scope-post-19.md) propone auditar carry
 BTC spot/futuro con vencimiento como mecanismo distinto. Exige ampliar el alcance
 a derivados cubiertos; es una propuesta de viabilidad, no una estrategia aprobada.
 
+El usuario autorizó esa investigación. La [auditoría de carry](docs/carry-data-audit.md)
+valida cuatro muestras de precios de 2022, pero no acredita reglas históricas
+de margen/costes y ejecución. No se abre backtest ni se construye otro motor.
+
 ### Antecedentes técnicos cerrados
 
 Ninguna receta está promovida. La [iteración 17](docs/iteration-17-results.md)

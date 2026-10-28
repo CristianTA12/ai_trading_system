@@ -2,6 +2,11 @@
 
 Fecha: 2026-10-28. Revisión documental y de fuentes públicas; cero backtests,
 entrenamientos, descargas de precios, acceso a cuentas o datos reservados.
+
+Seguimiento: el usuario autorizó investigar derivados de cobertura. La
+[auditoría posterior](carry-data-audit.md) valida una muestra de precios de 2022,
+pero no acredita margen/costes históricos y ejecución. No apta todavía para
+backtest; la propuesta original de esta ficha se conserva como antecedente.
 **Propuesta: auditar la viabilidad de cash-and-carry BTC con futuro de vencimiento.
 No hay estrategia aprobada ni cambio efectivo del mandato spot-only.**
 
