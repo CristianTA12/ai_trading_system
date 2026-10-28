@@ -9,6 +9,13 @@
 
 ## Decisión y siguiente hito condicionado
 
+Última revisión: [alcance y propuesta de carry](research-scope-post-19.md).
+Se recomienda estudiar la viabilidad de spot + futuro con vencimiento cubierto;
+es un mecanismo distinto, pero requiere ampliar el alcance spot-only. No hay
+viabilidad de datos confirmada, simulador ni cambio efectivo de mandato.
+La propuesta concreta es una auditoría pública de contrato/datos, sin backtest,
+antes de considerar implementación. B&H y el test reservado se mantienen.
+
 Revisión posterior autorizada: [ficha de tendencia diaria](research-reopening-daily-trend.md).
 No apta para abrir un experimento: el baseline diario de momentum de siete días
 ya se probó y falló. Cambiar a varias semanas, sin evidencia adicional, no

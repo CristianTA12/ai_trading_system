@@ -17,6 +17,10 @@ La [ficha posterior de tendencia diaria](docs/research-reopening-daily-trend.md)
 no justifica reabrir experimentos: ya existe un baseline semanal sin ML rechazado.
 No se probaron nuevas ventanas ni se accedió a datos reservados en esta revisión.
 
+La [revisión de alcance](docs/research-scope-post-19.md) propone auditar carry
+BTC spot/futuro con vencimiento como mecanismo distinto. Exige ampliar el alcance
+a derivados cubiertos; es una propuesta de viabilidad, no una estrategia aprobada.
+
 ### Antecedentes técnicos cerrados
 
 Ninguna receta está promovida. La [iteración 17](docs/iteration-17-results.md)
