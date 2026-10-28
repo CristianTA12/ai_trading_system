@@ -13,6 +13,10 @@ Solo una hipótesis económica completamente nueva o un cambio explícito de
 mandato justificarían reabrir investigación. Test reservado cerrado, sin paper
 ni trading real. [Plan vigente y antecedentes](docs/implementation_plan_fase4b_ai_trading.md).
 
+La [ficha posterior de tendencia diaria](docs/research-reopening-daily-trend.md)
+no justifica reabrir experimentos: ya existe un baseline semanal sin ML rechazado.
+No se probaron nuevas ventanas ni se accedió a datos reservados en esta revisión.
+
 ### Antecedentes técnicos cerrados
 
 Ninguna receta está promovida. La [iteración 17](docs/iteration-17-results.md)

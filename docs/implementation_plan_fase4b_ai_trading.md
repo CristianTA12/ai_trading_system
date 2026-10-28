@@ -9,6 +9,11 @@
 
 ## Decisión y siguiente hito condicionado
 
+Revisión posterior autorizada: [ficha de tendencia diaria](research-reopening-daily-trend.md).
+No apta para abrir un experimento: el baseline diario de momentum de siete días
+ya se probó y falló. Cambiar a varias semanas, sin evidencia adicional, no
+justifica una hipótesis nueva. Ficha cerrada sin backtests ni entrenamiento.
+
 La histéresis reduce operaciones de 697 a 350 y mejora neto en 4/5 frente al
 original, pero eleva DD concatenado a 17,58–21,83% y falla consistencia en 5/5.
 Cero entrenamientos; 188 backtests emparejados sobre probabilidades congeladas
@@ -16,8 +21,8 @@ v1 de it.13. [Protocolo preregistrado](iteration-19-protocol.md), sin cambios
 retrospectivos de umbral, folds, semillas, costes ni `risk-return-v1`.
 
 Conforme al acuerdo, se cierra la familia. No hay otra variante de política,
-feature o arquitectura pendiente para rescatar esta receta. Test 2024 y
-2025–2026 cerrados; sin paper ni trading real. La reutilización intensiva de
+feature o arquitectura pendiente para rescatar esta receta. Validación 2024 y
+test 2025–2026 cerrados; sin paper ni trading real. La reutilización intensiva de
 2022–2023 se reconoce como desarrollo adaptativo, no confirmación independiente.
 
 Una reapertura necesitaría una hipótesis económica completamente nueva o un
