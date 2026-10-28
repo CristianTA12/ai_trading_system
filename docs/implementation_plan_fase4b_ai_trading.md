@@ -9,6 +9,12 @@
 
 ## Decisión y siguiente hito condicionado
 
+Seguimiento más reciente: [evidencias de carry](carry-evidence-followup.md).
+Se localizaron siete referencias CDX de tarifas/margen y 92 días de archivos
+de trades. Las tres capturas seleccionadas están bloqueadas por HTTP 429 y los
+prefijos bid/ask consultados están vacíos. No repetir búsquedas generales ni
+construir motor; reanudar solo con las evidencias pendientes descritas en el informe.
+
 Resultado más reciente: [auditoría de carry](carry-data-audit.md), autorizada
 la investigación de derivados cubiertos. Cuatro series con 96/96 barras y
 checksums válidos; margen/costes históricos, liquidación y ejecución sin acreditar.

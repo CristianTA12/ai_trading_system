@@ -5,6 +5,12 @@ futuros de cobertura. Esta autorización no implica operar, abrir cuentas,
 usar claves ni cambiar el benchmark. La familia de 19 iteraciones sigue cerrada.
 
 **Veredicto: no apto todavía para un backtest histórico causal de carry.**
+
+Seguimiento: [búsqueda concreta de reglas y ejecución](carry-evidence-followup.md).
+Localizadas capturas históricas de tarifas/margen, con lectura bloqueada HTTP 429,
+y 92 archivos diarios de trades; bid/ask y profundidad no aparecen en los
+prefijos consultados. Se conserva el veredicto, sin confundir bloqueo de acceso
+con inexistencia de evidencia.
 La muestra de precios pasa; faltan evidencias esenciales de reglas y ejecución.
 No se concluye que carry no sea rentable ni que los datos faltantes no existan.
 Se cierra esta auditoría con alcance limitado, sin construir un simulador.

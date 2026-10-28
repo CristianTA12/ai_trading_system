@@ -24,6 +24,9 @@ a derivados cubiertos; es una propuesta de viabilidad, no una estrategia aprobad
 El usuario autorizó esa investigación. La [auditoría de carry](docs/carry-data-audit.md)
 valida cuatro muestras de precios de 2022, pero no acredita reglas históricas
 de margen/costes y ejecución. No se abre backtest ni se construye otro motor.
+El [seguimiento de evidencias](docs/carry-evidence-followup.md) localiza capturas
+históricas, cuya lectura está bloqueada, y trades archivados; mantiene el bloqueo
+de viabilidad y deja referencias concretas para resolverlo sin repetir la búsqueda.
 
 ### Antecedentes técnicos cerrados
 
